@@ -3,14 +3,15 @@
 @theme {
   --font-sans: 'Poppins', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
 
-  --color-espresso: #241a17;
-  --color-cream: #f4efe7;
-  --color-roast: #3a2923;
-  --color-accent: #a65a32;
-  --color-ink: #171312;
-  --color-paper: #ebe3d6;
+  /* Palette drawn from The Barista's Coffee School logo. */
+  --color-espresso: #2b1a0e;
+  --color-cream: #f8eedf;
+  --color-roast: #442917; /* logo brown */
+  --color-accent: #9a5f2c; /* toasted caramel */
+  --color-ink: #1f130a;
+  --color-paper: #f2d7b2; /* logo cream */
   /* Darker accent for small text on cream (WCAG AA). */
-  --color-accent-deep: #8a4626;
+  --color-accent-deep: #7a4720;
 
   --ease-editorial: cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -74,15 +75,15 @@
   /* Outlined display numerals. */
   .text-outline {
     color: transparent;
-    -webkit-text-stroke: 1px rgb(23 19 18 / 0.55);
+    -webkit-text-stroke: 1px rgb(31 19 10 / 0.55);
   }
   .text-outline-cream {
     color: transparent;
-    -webkit-text-stroke: 1px rgb(244 239 231 / 0.35);
+    -webkit-text-stroke: 1px rgb(248 238 223 / 0.35);
   }
   .text-outline-ink {
     color: transparent;
-    -webkit-text-stroke: 1px rgb(23 19 18 / 0.4);
+    -webkit-text-stroke: 1px rgb(31 19 10 / 0.4);
   }
 
   /* Layout rhythm: one gutter and one vertical rhythm for the whole page. */

@@ -14,7 +14,7 @@ function HeroTriangle() {
       <motion.path
         d="M150 60 L60 215 L240 215 Z"
         fill="none"
-        stroke="rgb(244 239 231 / 0.25)"
+        stroke="rgb(248 238 223 / 0.25)"
         strokeWidth={0.75}
         strokeDasharray="3 5"
         initial={{ pathLength: 0 }}
@@ -31,20 +31,34 @@ function HeroTriangle() {
             transition={{ duration: 1, ease: EASE, delay: 1.2 + i * 0.15 }}
             style={{ transformOrigin: `${c.cx}px ${c.cy}px` }}
           >
-            <circle cx={c.cx} cy={c.cy} r={34} fill="none" stroke="rgb(244 239 231 / 0.55)" strokeWidth={1} />
-            <motion.circle
-              cx={c.cx}
-              cy={c.cy}
-              r={25}
-              fill={odd ? 'var(--color-accent)' : 'rgb(244 239 231 / 0.08)'}
-              initial={odd ? { scale: 0 } : false}
-              animate={odd ? { scale: 1 } : undefined}
-              transition={{ duration: 1, ease: EASE, delay: 2.1 }}
-              style={{ transformOrigin: `${c.cx}px ${c.cy}px` }}
+            {/* steam */}
+            <path
+              d={`M${c.cx - 8} ${c.cy - 26}c-4 -5 4 -9 0 -14M${c.cx + 6} ${c.cy - 26}c-4 -5 4 -9 0 -14`}
+              fill="none"
+              stroke="rgb(248 238 223 / 0.35)"
+              strokeWidth={1}
+              strokeLinecap="round"
             />
+            {/* opaque backing so the dashed triangle stays behind the cup */}
+            <path d={`M${c.cx - 30} ${c.cy - 14}h60v6a30 30 0 0 1 -60 0z`} fill="var(--color-espresso)" />
+            {/* coffee */}
+            <motion.path
+              d={`M${c.cx - 27} ${c.cy - 11}h54v3a27 27 0 0 1 -54 0z`}
+              fill={odd ? 'var(--color-accent)' : 'rgb(248 238 223 / 0.08)'}
+              initial={odd ? { scaleY: 0 } : false}
+              animate={odd ? { scaleY: 1 } : undefined}
+              transition={{ duration: 1, ease: EASE, delay: 2.1 }}
+              style={{ transformOrigin: `${c.cx}px ${c.cy + 19}px` }}
+            />
+            {/* cup, handle, saucer */}
+            <g fill="none" stroke="rgb(248 238 223 / 0.6)" strokeWidth={1.2} strokeLinecap="round" strokeLinejoin="round">
+              <path d={`M${c.cx - 30} ${c.cy - 14}h60v6a30 30 0 0 1 -60 0z`} />
+              <path d={`M${c.cx + 30} ${c.cy - 10}h3a9 9 0 0 1 0 18h-5`} />
+              <path d={`M${c.cx - 40} ${c.cy + 30}h80`} />
+            </g>
             <text
               x={c.cx}
-              y={c.cy + 58}
+              y={c.cy + 52}
               textAnchor="middle"
               className="fill-cream/60 text-[9px] font-semibold tracking-[0.25em]"
             >
@@ -115,7 +129,7 @@ export function Hero() {
             <br />
             Championship
             <span className="mt-2 flex items-center gap-3 text-[0.6em] font-semibold tracking-[0.4em] text-accent">
-              <span className="h-px w-8 bg-accent" /> Nepal
+              Nepal
             </span>
           </motion.h1>
           <motion.p

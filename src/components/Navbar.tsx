@@ -1,7 +1,7 @@
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { EASE, TriMark } from './ui'
+import { BrandLogo, EASE } from './ui'
 
 const links = [
   { label: 'The Challenge', href: '#about' },
@@ -40,8 +40,8 @@ export function Navbar() {
         transition={{ duration: 0.5, ease: EASE }}
       >
         <nav className="wrap flex h-16 items-center justify-between gap-3 text-cream md:h-[4.5rem]">
-          <a href="#top" className="flex min-w-0 items-center gap-2.5 sm:gap-3" aria-label="Cup Tasters Championship — back to top">
-            <TriMark size={22} stroke="var(--color-cream)" className="shrink-0" />
+          <a href="#top" className="flex min-w-0 items-center gap-2.5 sm:gap-3" aria-label="Cup Tasters Championship, back to top">
+            <BrandLogo size={40} className="md:h-11 md:w-11" />
             <span className="text-[0.65rem] leading-tight font-bold tracking-[0.2em] uppercase sm:text-xs">
               Barista&rsquo;s
               <br className="sm:hidden" /> Coffee School
@@ -97,7 +97,7 @@ export function Navbar() {
           >
             <div className="relative z-10 flex items-center justify-between">
               <span className="flex items-center gap-3 text-[0.65rem] font-bold tracking-[0.2em] uppercase">
-                <TriMark size={22} stroke="var(--color-cream)" /> Cup Tasters · Nepal
+                <BrandLogo size={36} /> Cup Tasters · Nepal
               </span>
               <button type="button" onClick={() => setOpen(false)} className="p-2" aria-label="Close menu">
                 <X size={24} strokeWidth={1.5} />

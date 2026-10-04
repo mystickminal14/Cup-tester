@@ -1,5 +1,5 @@
 import { photoCredits, social } from '../data/event'
-import { TriMark } from './ui'
+import { BrandLogo } from './ui'
 
 export function Footer() {
   return (
@@ -7,8 +7,8 @@ export function Footer() {
       <div className="wrap relative z-10 pt-14 pb-6 md:pt-20">
         <div className="grid gap-10 md:grid-cols-12 md:items-end">
           <div className="md:col-span-7">
-            <p className="eyebrow flex items-center gap-3 text-cream/60">
-              <TriMark size={18} stroke="var(--color-cream)" /> Barista&rsquo;s Coffee School
+            <p className="eyebrow flex items-center gap-4 text-cream/60">
+              <BrandLogo size={64} /> Barista&rsquo;s Coffee School
             </p>
             <p className="title-section mt-5">
               Cup Tasters Championship <span className="text-accent">Nepal</span>

@@ -1,47 +1,56 @@
 import { motion, useInView, animate, type Variants } from 'framer-motion'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
+import logoUrl from '../assets/bcs-logo.png'
 
 export const EASE = [0.22, 1, 0.36, 1] as const
 
+/** The Barista's Coffee School roundel. */
+export function BrandLogo({ size = 44, className = '' }: { size?: number; className?: string }) {
+  return (
+    <img
+      src={logoUrl}
+      alt=""
+      width={size}
+      height={size}
+      className={`shrink-0 rounded-full ring-1 ring-paper/40 ${className}`}
+      aria-hidden="true"
+    />
+  )
+}
+
 /**
- * The brand motif: three cups in a triangle, one of them different.
- * `odd` picks which cup is filled (0 = top, 1 = bottom-left, 2 = bottom-right).
+ * The brand motif: a cupping cup with rising steam.
+ * `filled` pours coffee into the cup in the accent colour (the "odd" cup).
  */
-export function TriMark({
+export function CupMark({
   size = 18,
-  odd = 2,
+  filled = true,
   className = '',
   stroke = 'currentColor',
 }: {
   size?: number
-  odd?: 0 | 1 | 2
+  filled?: boolean
   className?: string
   stroke?: string
 }) {
-  const pts: [number, number][] = [
-    [12, 5],
-    [5, 18],
-    [19, 18],
-  ]
   return (
     <svg
       width={size}
       height={size}
       viewBox="0 0 24 24"
+      fill="none"
+      stroke={stroke}
+      strokeWidth={1.5}
+      strokeLinecap="round"
+      strokeLinejoin="round"
       className={className}
       aria-hidden="true"
     >
-      {pts.map(([cx, cy], i) => (
-        <circle
-          key={i}
-          cx={cx}
-          cy={cy}
-          r={3.6}
-          fill={i === odd ? 'var(--color-accent)' : 'none'}
-          stroke={i === odd ? 'var(--color-accent)' : stroke}
-          strokeWidth={1.4}
-        />
-      ))}
+      <path d="M9 2.5c-.9 1 .9 2 0 3M12.5 2.5c-.9 1 .9 2 0 3" opacity={0.7} />
+      {filled && <path d="M4.6 10.5h12.8V12a6.4 6.4 0 0 1-12.8 0z" fill="var(--color-accent)" stroke="none" />}
+      <path d="M3.5 8.5h15V12a7.5 7.5 0 0 1-15 0z" />
+      <path d="M18.5 10h.75a2.5 2.5 0 0 1 0 5H18" />
+      <path d="M2.5 21.5h17" />
     </svg>
   )
 }
@@ -57,9 +66,8 @@ export function SectionLabel({
 }) {
   return (
     <div className={`eyebrow flex items-center gap-3 ${className}`}>
-      <TriMark size={16} />
+      <CupMark size={18} />
       <span className="tabular-nums opacity-60">{index}</span>
-      <span className="h-px w-8 bg-current opacity-30" />
       <span>{children}</span>
     </div>
   )

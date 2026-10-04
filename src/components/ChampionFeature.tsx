@@ -1,5 +1,5 @@
 import type { ArchiveEdition } from '../data/event'
-import { SplitLines, TriMark } from './ui'
+import { CupMark, SplitLines } from './ui'
 
 /** Sports-style profile of an edition's champion, with the big "01" behind the name. */
 export function ChampionFeature({ edition }: { edition: ArchiveEdition }) {
@@ -16,7 +16,7 @@ export function ChampionFeature({ edition }: { edition: ArchiveEdition }) {
         01
       </span>
       <p className="eyebrow relative flex items-center gap-3 text-accent">
-        <TriMark size={16} odd={0} stroke="var(--color-cream)" />
+        <CupMark size={18} stroke="var(--color-cream)" />
         {edition.year} Champion
       </p>
       <SplitLines
@@ -26,7 +26,7 @@ export function ChampionFeature({ edition }: { edition: ArchiveEdition }) {
         stagger={0.1}
       />
       <p className="relative mt-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-[0.95rem] font-medium">
-        Winner — {edition.title}
+        Winner, {edition.title}
         {champ.note && (
           <span className="rounded-full border border-cream/25 px-2.5 py-0.5 text-[0.7rem] font-medium text-cream/70">
             {champ.note}

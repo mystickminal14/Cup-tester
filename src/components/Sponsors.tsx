@@ -1,5 +1,5 @@
 import { contactUrl, partnerSlots, sponsors } from '../data/event'
-import { TriMark } from './ui'
+import { CupMark } from './ui'
 
 /** Partner strip. Shows confirmed partners, or an invitation while the list is empty. */
 export function Sponsors() {
@@ -21,7 +21,7 @@ export function Sponsors() {
         <ul className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
           {sponsors.map((s) => (
             <li key={s.name} className="flex h-20 items-center justify-center rounded-[3px] bg-cream/95 p-3">
-              <a href={s.href} target="_blank" rel="noreferrer" title={s.tier ? `${s.name} — ${s.tier}` : s.name}>
+              <a href={s.href} target="_blank" rel="noreferrer" title={s.tier ? `${s.name}, ${s.tier}` : s.name}>
                 <img src={s.logo} alt={s.name} className="max-h-10 max-w-full object-contain" />
               </a>
             </li>
@@ -40,7 +40,7 @@ export function Sponsors() {
               className="flex h-20 items-center justify-center rounded-[3px] border border-dashed border-cream/20"
               aria-label="Open partner slot"
             >
-              <TriMark size={22} odd={(i % 3) as 0 | 1 | 2} stroke="rgb(244 239 231 / 0.4)" />
+              <CupMark size={26} filled={i % 3 === 2} stroke="rgb(248 238 223 / 0.4)" />
             </li>
           ))}
         </ul>

@@ -19,9 +19,9 @@ export function TriangulationDiagram({ tone = 'light' }: { tone?: 'light' | 'dar
   const [odd, setOdd] = useState(2)
   const [round, setRound] = useState(0)
 
-  const line = tone === 'dark' ? 'rgb(244 239 231 / 0.35)' : 'rgb(23 19 18 / 0.3)'
-  const rim = tone === 'dark' ? 'rgb(244 239 231 / 0.7)' : 'rgb(23 19 18 / 0.75)'
-  const same = tone === 'dark' ? '#5a4339' : '#3a2923'
+  const line = tone === 'dark' ? 'rgb(248 238 223 / 0.35)' : 'rgb(31 19 10 / 0.3)'
+  const rim = tone === 'dark' ? 'rgb(248 238 223 / 0.7)' : 'rgb(31 19 10 / 0.75)'
+  const same = tone === 'dark' ? '#5c3a20' : '#442917'
   const text = tone === 'dark' ? 'fill-cream' : 'fill-ink'
 
   const shuffle = () => {
@@ -80,7 +80,7 @@ export function TriangulationDiagram({ tone = 'light' }: { tone?: 'light' | 'dar
                 cy={c.y}
                 r={42}
                 initial={{ fill: same, scale: 0.85 }}
-                animate={inView ? { fill: isOdd ? '#a65a32' : same, scale: 1 } : undefined}
+                animate={inView ? { fill: isOdd ? '#9a5f2c' : same, scale: 1 } : undefined}
                 transition={{ duration: 0.8, ease: EASE, delay: round ? 0 : 1.1 + i * 0.1 }}
                 style={{ transformOrigin: `${c.x}px ${c.y}px` }}
               />
@@ -122,7 +122,6 @@ export function TriangulationDiagram({ tone = 'light' }: { tone?: 'light' | 'dar
             <span className="block text-[clamp(2.25rem,4vw,3rem)] font-extrabold tracking-tighter">2</span>
             <span className="eyebrow mt-2 block opacity-70">Same</span>
           </p>
-          <span className="mb-5 h-px w-6 bg-current opacity-30" aria-hidden="true" />
           <p className="leading-none text-accent">
             <span className="block text-[clamp(2.25rem,4vw,3rem)] font-extrabold tracking-tighter">1</span>
             <span className="eyebrow mt-2 block">Different</span>

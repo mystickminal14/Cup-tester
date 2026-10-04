@@ -13,7 +13,7 @@ import {
 import { event } from '../data/event'
 import { Eligibility } from './Eligibility'
 import { EventDetails } from './EventDetails'
-import { EASE, SectionLabel, SplitLines } from './ui'
+import { CupMark, EASE, SectionLabel, SplitLines } from './ui'
 
 /* ── Form model ───────────────────────────────────────────────────────────── */
 
@@ -223,7 +223,7 @@ function Success({ name, preview, onReset }: { name: string; preview: boolean; o
         <p className="eyebrow mt-6 break-words text-cream/55">Applicant · {name}</p>
         {preview && (
           <p className="mt-5 border-l-2 border-accent pl-4 text-xs text-cream/60">
-            Preview mode — no form endpoint is configured yet, so this application was not sent. Set{' '}
+            Preview mode: no form endpoint is configured yet, so this application was not sent. Set{' '}
             <code className="break-all text-cream/85">registration.formEndpoint</code> in{' '}
             <code className="break-all text-cream/85">src/data/event.ts</code>.
           </p>
@@ -393,19 +393,15 @@ export function RegistrationForm() {
                 noValidate
                 onSubmit={onSubmit}
                 aria-label="Cup Tasters Championship application"
-                className="relative rounded-[4px] border border-ink/12 bg-[#f9f5ee] p-5 shadow-[0_1px_0_rgb(23_19_18/0.04),0_24px_48px_-32px_rgb(36_26_23/0.35)] sm:p-8 lg:p-10"
+                className="relative rounded-[4px] border border-ink/12 bg-[#fcf6ec] p-5 shadow-[0_1px_0_rgb(31_19_10/0.04),0_24px_48px_-32px_rgb(43_26_14/0.35)] sm:p-8 lg:p-10"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-10% 0px' }}
                 exit={{ opacity: 0, y: -16 }}
                 transition={{ duration: 0.7, ease: EASE }}
               >
-                {/* triangle motif on the form's corner */}
-                <svg className="absolute top-5 right-5 hidden w-6 text-ink/25 sm:block" viewBox="0 0 24 24" aria-hidden="true">
-                  <circle cx="12" cy="5" r="3.6" fill="none" stroke="currentColor" strokeWidth="1.4" />
-                  <circle cx="5" cy="18" r="3.6" fill="none" stroke="currentColor" strokeWidth="1.4" />
-                  <circle cx="19" cy="18" r="3.6" fill="var(--color-accent)" />
-                </svg>
+                {/* cup motif on the form's corner */}
+                <CupMark size={28} className="absolute top-5 right-5 hidden text-ink/30 sm:block" />
 
                 {/* honeypot */}
                 <div className="absolute -left-[9999px]" aria-hidden="true">
@@ -453,7 +449,7 @@ export function RegistrationForm() {
                   <Field
                     id={id('previousCompetition')}
                     label="Previous competition experience"
-                    hint="Competitions entered and rounds reached — or “none yet”."
+                    hint="Competitions entered and rounds reached, or “none yet”."
                     className="sm:col-span-2"
                   >
                     <textarea

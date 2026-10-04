@@ -13,9 +13,9 @@ export function Eligibility() {
         ))}
       </ul>
       {eligibility.requirements.length > 0 ? (
-        <ul className="mt-3 space-y-1 text-sm text-ink/75">
+        <ul className="mt-3 list-disc space-y-1 pl-4 text-sm text-ink/75 marker:text-accent">
           {eligibility.requirements.map((r) => (
-            <li key={r}>— {r}</li>
+            <li key={r}>{r}</li>
           ))}
         </ul>
       ) : (

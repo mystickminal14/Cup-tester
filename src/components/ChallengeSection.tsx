@@ -11,7 +11,7 @@ import { EASE, Reveal, SplitLines } from './ui'
 
 const steps = [
   { word: 'Aroma', text: 'The first clue arrives before the first sip.' },
-  { word: 'Taste', text: 'Acidity, body, sweetness — measured against memory.' },
+  { word: 'Taste', text: 'Acidity, body and sweetness, measured against memory.' },
   { word: 'Attention', text: 'Three cups. No distractions. No second-guessing.' },
   { word: 'Decision', text: 'Point to one cup. Commit.' },
   { word: 'Speed', text: 'When answers match, the clock decides.' },
@@ -23,10 +23,10 @@ function Stopwatch({ progress, active }: { progress: MotionValue<number>; active
     <div className="relative aspect-[320/340] w-full">
       <svg viewBox="0 0 320 340" className="h-full w-full" aria-hidden="true">
         {/* crown */}
-        <rect x={148} y={0} width={24} height={14} fill="none" stroke="rgb(244 239 231 / 0.6)" strokeWidth={1.2} />
-        <rect x={154} y={14} width={12} height={10} fill="rgb(244 239 231 / 0.6)" />
+        <rect x={148} y={0} width={24} height={14} fill="none" stroke="rgb(248 238 223 / 0.6)" strokeWidth={1.2} />
+        <rect x={154} y={14} width={12} height={10} fill="rgb(248 238 223 / 0.6)" />
         <g transform="translate(0 20)">
-          <circle cx={160} cy={160} r={150} fill="rgb(36 26 23 / 0.6)" stroke="rgb(244 239 231 / 0.18)" strokeWidth={1} />
+          <circle cx={160} cy={160} r={150} fill="rgb(43 26 14 / 0.6)" stroke="rgb(248 238 223 / 0.18)" strokeWidth={1} />
           <motion.circle
             cx={160}
             cy={160}
@@ -47,7 +47,7 @@ function Stopwatch({ progress, active }: { progress: MotionValue<number>; active
                 y1={160 - Math.cos(a) * r1}
                 x2={160 + Math.sin(a) * 140}
                 y2={160 - Math.cos(a) * 140}
-                stroke={major ? 'rgb(244 239 231 / 0.7)' : 'rgb(244 239 231 / 0.25)'}
+                stroke={major ? 'rgb(248 238 223 / 0.7)' : 'rgb(248 238 223 / 0.25)'}
                 strokeWidth={major ? 2 : 1}
               />
             )

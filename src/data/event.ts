@@ -195,11 +195,11 @@ export const rules = {
   pdfUrl: null as string | null,
   previous: [
     {
-      label: 'Rules & Regulations — 2024',
+      label: 'Rules & Regulations 2024',
       href: 'https://baristascoffeeschool.com.np/wp-content/uploads/2024/05/Rules-and-Regulations-2024-CUP-TASTERS-EVENT.pdf',
     },
     {
-      label: 'Rules & Regulations — 2022',
+      label: 'Rules & Regulations 2022',
       href: 'https://baristascoffeeschool.com.np/wp-content/uploads/2022/09/Rules-and-Regulations-2022-CUP-TASTERS-EVENT.pdf',
     },
   ] satisfies LinkItem[],
@@ -383,7 +383,7 @@ export const contactUrl = 'https://baristascoffeeschool.com.np/contact-2/'
 
 export const photoCredits: string[] = [
   "Event photography: The Barista's Coffee School",
-  'Two tasters over cupping bowls ("Fancy a cupper"): DFID — UK Department for International Development, CC BY 2.0, via Wikimedia Commons',
+  'Two tasters over cupping bowls ("Fancy a cupper"): DFID, UK Department for International Development, CC BY 2.0, via Wikimedia Commons',
   'Coffee Cupping series: Visitor7, CC BY-SA 3.0, via Wikimedia Commons',
   "Peet's Cupping: UC Davis College of Engineering, CC BY 2.0, via Wikimedia Commons",
   'Catación Valdesia: Rpdecamps, CC BY 3.0, via Wikimedia Commons',

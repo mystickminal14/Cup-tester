@@ -16,7 +16,7 @@ export function CupTastersIntro() {
             <Reveal>
               <p className="lead mt-6 max-w-xl text-ink/75">
                 Three cups. Two hold the same coffee; one does not. Using smell, taste and focus, competitors
-                find the odd cup — as accurately and as quickly as they can — then move to the next triangle.
+                find the odd cup as accurately and as quickly as they can, then move to the next triangle.
               </p>
               <p className="mt-3 text-xs text-ink/55">Based on the established Cup Tasters competition format.</p>
             </Reveal>
