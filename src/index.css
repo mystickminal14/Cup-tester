@@ -1,17 +1,24 @@
 @import 'tailwindcss';
 
 @theme {
-  --font-sans: 'Poppins', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-sans: 'Fredoka', 'Nunito', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  /* Chunky cartoon caps, in the spirit of the 2026 poster's lettering. */
+  --font-headline: 'Luckiest Guy', 'Fredoka', ui-sans-serif, system-ui, sans-serif;
 
-  /* Palette drawn from The Barista's Coffee School logo. */
-  --color-espresso: #2b1a0e;
-  --color-cream: #f8eedf;
-  --color-roast: #442917; /* logo brown */
-  --color-accent: #9a5f2c; /* toasted caramel */
-  --color-ink: #1f130a;
-  --color-paper: #f2d7b2; /* logo cream */
-  /* Darker accent for small text on cream (WCAG AA). */
-  --color-accent-deep: #7a4720;
+  /* Palette sampled from the official Cup Tasters Championship 2026 poster. */
+  /* The poster's #001bf9, calmed down: the neon original was too harsh on the eyes
+     across whole sections of a screen. */
+  --color-blue: #1e32b8;
+  --color-blue-deep: #16237e;
+  --color-navy: #0a0f45; /* body text on light, footer */
+  --color-yellow: #fff100; /* "CUP TASTERS" lettering */
+  --color-yellow-soft: #fff9a6;
+  --color-gold: #f4cf34; /* flower, leaves, sparkles */
+  --color-red: #eb1c24; /* the mascots' tongues */
+  --color-red-deep: #c8101a; /* red that holds white text (AA) */
+  --color-sky: #55c1dd; /* the cup mascot's sweat drops */
+  --color-cream: #fdf5dd; /* the cup mascot */
+  --color-bean: #582b0e; /* the coffee-bean mascot */
 
   --ease-editorial: cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -31,106 +38,103 @@
   }
 
   body {
-    @apply bg-cream font-sans text-ink;
-    font-feature-settings: 'ss01', 'tnum' 0;
+    @apply bg-cream font-sans text-navy;
   }
 
   section[id] {
-    scroll-margin-top: 4.5rem;
+    scroll-margin-top: 5rem;
   }
 
   ::selection {
-    background: var(--color-accent);
-    color: var(--color-cream);
+    background: var(--color-yellow);
+    color: var(--color-navy);
+  }
+
+  /* Tailwind v4 resets buttons to the default cursor; every control here is clickable. */
+  button:not(:disabled),
+  [role='button'],
+  [role='tab']:not(:disabled),
+  summary,
+  select,
+  label[for],
+  input[type='checkbox'],
+  input[type='file'] {
+    cursor: pointer;
+  }
+  button:disabled {
+    cursor: not-allowed;
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-accent);
+    outline: 3px solid var(--color-red);
     outline-offset: 3px;
   }
 }
 
 @layer components {
-  /* Film-grain texture. Add `grain` to any relatively positioned section. */
-  .grain {
-    position: relative;
-    isolation: isolate;
-  }
-  .grain::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 1;
-    opacity: 0.09;
-    mix-blend-mode: overlay;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1.2 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
-  }
-  .grain-dark::after {
-    mix-blend-mode: multiply;
-    opacity: 0.12;
-    filter: invert(1);
-  }
-
-  /* Outlined display numerals. */
-  .text-outline {
-    color: transparent;
-    -webkit-text-stroke: 1px rgb(31 19 10 / 0.55);
-  }
-  .text-outline-cream {
-    color: transparent;
-    -webkit-text-stroke: 1px rgb(248 238 223 / 0.35);
-  }
-  .text-outline-ink {
-    color: transparent;
-    -webkit-text-stroke: 1px rgb(31 19 10 / 0.4);
-  }
-
   /* Layout rhythm: one gutter and one vertical rhythm for the whole page. */
   .wrap {
     margin-inline: auto;
     width: 100%;
-    max-width: 1440px;
+    max-width: 1320px;
     padding-inline: clamp(1rem, 4vw, 2.5rem);
   }
+  /* Height-aware so sections fit short laptop screens (e.g. 1366×768, 125% scaling). */
   .section-y {
-    padding-block: clamp(3.5rem, 8vw, 7rem);
+    padding-block: clamp(3rem, min(7vw, 8.5svh), 6.5rem);
   }
 
-  /* Type scale: hero (.display + size) › section title › subtitle › lead › body. */
-  .title-section {
-    font-size: clamp(1.85rem, 4.2vw, 3.75rem);
-    font-weight: 800;
-    letter-spacing: -0.04em;
+  /* Type scale: headline › section title › subtitle › lead › body. */
+  .headline {
+    font-family: var(--font-headline);
+    font-weight: 400;
+    letter-spacing: 0.01em;
     line-height: 0.95;
     text-transform: uppercase;
   }
-  .title-sub {
-    font-size: clamp(1.1rem, 1.7vw, 1.4rem);
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    line-height: 1.1;
+  .title-section {
+    font-family: var(--font-headline);
+    font-size: clamp(2.2rem, min(5.2vw, 8.5svh), 4.4rem);
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    line-height: 0.98;
     text-transform: uppercase;
+  }
+  .title-sub {
+    font-size: clamp(1.2rem, 1.8vw, 1.55rem);
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    line-height: 1.15;
   }
   .lead {
     font-size: clamp(1rem, 1.25vw, 1.15rem);
-    line-height: 1.6;
+    line-height: 1.65;
   }
-
+  /* The poster's tracked "EVENT ORGANIZED BY" style. */
   .eyebrow {
-    @apply text-[0.68rem] font-semibold tracking-[0.28em] uppercase;
+    @apply text-[0.75rem] font-semibold tracking-[0.18em] uppercase;
   }
 
-  .display {
-    @apply font-extrabold tracking-[-0.045em] uppercase;
-    line-height: 0.86;
+  /* Hard cartoon drop shadow under headline type. */
+  .headline-shadow {
+    text-shadow: 0.045em 0.055em 0 var(--color-navy);
   }
 
-  .photo-mono {
-    filter: grayscale(1) contrast(1.12) brightness(0.92);
+  /* Rounded, chunky button. Colours come from utilities. */
+  .btn {
+    @apply inline-flex items-center justify-center gap-3 rounded-full border-[3px] border-navy px-6 py-3 text-[1rem] font-semibold tracking-[0.02em] transition-[transform,background-color,color,box-shadow] duration-300 ease-(--ease-editorial) hover:-translate-y-0.5 active:translate-y-0;
   }
-  .photo-warm {
-    filter: sepia(0.18) saturate(0.9) contrast(1.06);
+
+  /* The poster's soft wave texture, as a white overlay that works on any background. */
+  .waves {
+    background-image: url('/images/poster/waves-overlay.webp');
+    background-size: 900px auto;
+  }
+
+  /* Cartoon "sticker" outline + hard shadow, like the mascots. */
+  .sticker {
+    border: 3px solid var(--color-navy);
+    box-shadow: 5px 6px 0 var(--color-navy);
   }
 
   .no-scrollbar {
@@ -138,5 +142,66 @@
   }
   .no-scrollbar::-webkit-scrollbar {
     display: none;
+  }
+
+  .float-slow {
+    animation: float 6s ease-in-out infinite;
+  }
+  @keyframes float {
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  /* "Tap a cup to taste": the whole line breathes in and out… */
+  .cta-zoom {
+    display: inline-block;
+    transform-origin: left center;
+    animation: cta-zoom 1.6s ease-in-out infinite;
+  }
+  @keyframes cta-zoom {
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.12);
+    }
+  }
+  /* …each letter hops in a wave… */
+  .cta-wave {
+    display: inline-block;
+    animation: cta-wave 1.6s ease-in-out infinite;
+  }
+  @keyframes cta-wave {
+    0%,
+    40%,
+    100% {
+      transform: translateY(0);
+      color: var(--color-yellow);
+    }
+    20% {
+      transform: translateY(-0.28em);
+      color: var(--color-white);
+    }
+  }
+  /* …and an arrow points up at the cups. */
+  .cta-point {
+    display: inline-block;
+    animation: cta-point 0.9s ease-in-out infinite;
+  }
+  @keyframes cta-point {
+    50% {
+      transform: translateY(-0.3em);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .float-slow,
+    .cta-zoom,
+    .cta-wave,
+    .cta-point {
+      animation: none;
+    }
   }
 }

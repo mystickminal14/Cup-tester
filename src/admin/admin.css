@@ -1,0 +1,23 @@
+@reference "../index.css";
+
+/* Shared controls for the admin (AdsMitra style). Loaded only with /admin. */
+@layer components {
+  .field {
+    @apply flex flex-col gap-1.5 text-[13px] font-medium text-zinc-700 dark:text-zinc-300;
+  }
+  .input {
+    @apply w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-[14px] font-normal text-zinc-950 outline-none placeholder:text-zinc-400 focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 dark:focus:border-zinc-50 dark:focus:ring-zinc-50;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-1.5 rounded-lg border border-zinc-200 bg-white px-3 py-1.5 font-medium text-zinc-950 transition hover:bg-zinc-50 active:scale-[0.97] disabled:pointer-events-none disabled:opacity-40 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 dark:hover:bg-zinc-800;
+  }
+  .btn-xs {
+    @apply gap-1 px-2.5 py-1 text-[12.5px] whitespace-nowrap;
+  }
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg bg-zinc-900 px-4 py-2.5 font-medium text-white transition hover:opacity-90 active:scale-[0.98] disabled:opacity-40 dark:bg-zinc-50 dark:text-zinc-900;
+  }
+  .icon-btn {
+    @apply grid h-[34px] w-[34px] shrink-0 place-items-center rounded-lg text-zinc-600 transition-colors hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800;
+  }
+}

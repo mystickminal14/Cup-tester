@@ -13,13 +13,19 @@ npm run preview  # serve the production build
 
 ## Page structure
 
-1. **Hero**: the name, the "Three cups. One difference." statement, CTAs and the event status strip
-2. **The challenge** (`CupTastersIntro`): what Cup Tasters is, the triangulation diagram, and the scroll-driven stopwatch block (`ChallengeSection`)
+1. **Hero**: the 2026 poster ("Event organized by" logos, "Coming soon", the Cup Tasters lettering, the mascots and "Nepal's biggest coffee tasting challenge!"), CTAs and the event status cards, followed by a yellow ticker
+2. **The challenge** (`CupTastersIntro`): what Cup Tasters is, the triangulation diagram, and the five colour tiles (`ChallengeSection`)
 3. **How it works** (`CompetitionFormat`): four rounds, plus the rules accordion (`Rules`)
 4. **Past champions** (`ChampionsArchive` + `ChampionFeature`): one panel per edition
 5. **Register** (`RegistrationForm`): the form, plus `EventDetails` and `Eligibility`
 6. **Gallery** (`Gallery`): the photo grid, closing with the `Organizer` panel and `Sponsors` strip
 7. **Footer**
+
+The visual identity follows the official Cup Tasters Championship 2026 poster:
+poster blue `#001BF9`, lettering yellow `#FFF100`, gold shapes, red and sky
+accents. Luckiest Guy is used for headlines and Fredoka for everything else. The
+poster artwork (lettering, mascots, tagline, gold shapes, wave texture) lives in
+`public/images/poster/`, and the organizer logos live in `public/images/partners/`.
 
 Layout and type tokens live in `src/index.css`:
 - `.wrap` sets the page gutter.
@@ -36,6 +42,7 @@ hard-code event facts.
 | What | Where in `event.ts` |
 | --- | --- |
 | Date, venue, city, edition year | `event.date`, `event.venue`, `event.year` |
+| Poster tagline, co-organizer logos | `event.tagline`, `event.organizers` |
 | Registration status / note | `event.registration.status` (`'tba' \| 'coming-soon' \| 'open' \| 'closed'`) |
 | Entry fee, prize | `event.fee`, `event.prize` |
 | Round details (triangulations, time limits, advancing places) | `format.rounds[].details` |

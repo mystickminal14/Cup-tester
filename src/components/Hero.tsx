@@ -1,212 +1,146 @@
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { useRef } from 'react'
-import { event, registrationStatusLabel } from '../data/event'
-import { EASE, SplitLines, Tba } from './ui'
+import { event } from '../data/event'
+import { EventStrip } from './EventStrip'
+import { Deco, EASE } from './ui'
 
-function HeroTriangle() {
-  const cups = [
-    { cx: 150, cy: 60, label: '01' },
-    { cx: 60, cy: 215, label: '02' },
-    { cx: 240, cy: 215, label: '03' },
-  ]
+/** The poster's "CUP TASTERS CHAMPIONSHIP 2026" lettering. */
+export function Lockup({ className = '', animated = false }: { className?: string; animated?: boolean }) {
   return (
-    <svg viewBox="0 0 300 280" className="h-full w-full" aria-hidden="true">
-      <motion.path
-        d="M150 60 L60 215 L240 215 Z"
-        fill="none"
-        stroke="rgb(248 238 223 / 0.25)"
-        strokeWidth={0.75}
-        strokeDasharray="3 5"
-        initial={{ pathLength: 0 }}
-        animate={{ pathLength: 1 }}
-        transition={{ duration: 2, ease: EASE, delay: 1.1 }}
-      />
-      {cups.map((c, i) => {
-        const odd = i === 2
-        return (
-          <motion.g
-            key={c.label}
-            initial={{ opacity: 0, scale: 0.6 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1, ease: EASE, delay: 1.2 + i * 0.15 }}
-            style={{ transformOrigin: `${c.cx}px ${c.cy}px` }}
-          >
-            {/* steam */}
-            <path
-              d={`M${c.cx - 8} ${c.cy - 26}c-4 -5 4 -9 0 -14M${c.cx + 6} ${c.cy - 26}c-4 -5 4 -9 0 -14`}
-              fill="none"
-              stroke="rgb(248 238 223 / 0.35)"
-              strokeWidth={1}
-              strokeLinecap="round"
-            />
-            {/* opaque backing so the dashed triangle stays behind the cup */}
-            <path d={`M${c.cx - 30} ${c.cy - 14}h60v6a30 30 0 0 1 -60 0z`} fill="var(--color-espresso)" />
-            {/* coffee */}
-            <motion.path
-              d={`M${c.cx - 27} ${c.cy - 11}h54v3a27 27 0 0 1 -54 0z`}
-              fill={odd ? 'var(--color-accent)' : 'rgb(248 238 223 / 0.08)'}
-              initial={odd ? { scaleY: 0 } : false}
-              animate={odd ? { scaleY: 1 } : undefined}
-              transition={{ duration: 1, ease: EASE, delay: 2.1 }}
-              style={{ transformOrigin: `${c.cx}px ${c.cy + 19}px` }}
-            />
-            {/* cup, handle, saucer */}
-            <g fill="none" stroke="rgb(248 238 223 / 0.6)" strokeWidth={1.2} strokeLinecap="round" strokeLinejoin="round">
-              <path d={`M${c.cx - 30} ${c.cy - 14}h60v6a30 30 0 0 1 -60 0z`} />
-              <path d={`M${c.cx + 30} ${c.cy - 10}h3a9 9 0 0 1 0 18h-5`} />
-              <path d={`M${c.cx - 40} ${c.cy + 30}h80`} />
-            </g>
-            <text
-              x={c.cx}
-              y={c.cy + 52}
-              textAnchor="middle"
-              className="fill-cream/60 text-[9px] font-semibold tracking-[0.25em]"
-            >
-              CUP {c.label}
-            </text>
-          </motion.g>
-        )
+    <motion.img
+      src="/images/poster/lockup.webp"
+      alt={`Cup Tasters Championship${event.year ? ` ${event.year}` : ''}`}
+      width={1600}
+      height={712}
+      className={`block h-auto w-full ${className}`}
+      {...(animated && {
+        initial: { opacity: 0, scale: 0.8, rotate: -4 },
+        animate: { opacity: 1, scale: 1, rotate: 0 },
+        transition: { type: 'spring', stiffness: 120, damping: 12, delay: 0.35 },
       })}
-    </svg>
+    />
+  )
+}
+
+/** "── EVENT ORGANIZED BY ──" and the partner roundels, as on the poster. */
+export function OrganizedBy({ className = '' }: { className?: string }) {
+  return (
+    <div className={className}>
+      <p className="eyebrow flex items-center justify-center gap-3 text-white">
+        <span className="h-px w-10 bg-white/70 sm:w-24" aria-hidden="true" />
+        Event organized by
+        <span className="h-px w-10 bg-white/70 sm:w-24" aria-hidden="true" />
+      </p>
+      <ul className="mt-3 flex items-center justify-center">
+        {event.organizers.map((o, i) => (
+          <li
+            key={o.name}
+            className={`px-2 sm:px-3.5 ${i > 0 ? 'border-l border-white/70' : ''}`}
+            title={o.name}
+          >
+            <a
+              href={o.href}
+              target="_blank"
+              rel="noreferrer"
+              className="block rounded-full transition-transform duration-300 hover:scale-110"
+            >
+              <img
+                src={o.logo}
+                alt={o.name}
+                width={240}
+                height={240}
+                className="h-11 w-11 rounded-full bg-white sm:h-14 sm:w-14 lg:h-[min(4rem,7svh)] lg:w-[min(4rem,7svh)]"
+              />
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
   )
 }
 
 export function Hero() {
   const ref = useRef<HTMLElement>(null)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
-  const imgY = useTransform(scrollYProgress, [0, 1], ['0%', '18%'])
-  const imgScale = useTransform(scrollYProgress, [0, 1], [1.08, 1.18])
-  const contentY = useTransform(scrollYProgress, [0, 1], ['0%', '-10%'])
-  const contentOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0])
-
-  const info = [
-    { label: 'Date', value: event.date.label },
-    {
-      label: 'Location',
-      value: event.venue.name ? `${event.venue.name}, ${event.city}` : null,
-      fallback: `Venue TBA · ${event.city}`,
-    },
-    {
-      label: 'Registration',
-      value: event.registration.status === 'tba' ? null : registrationStatusLabel[event.registration.status],
-      fallback: 'Opening date TBA',
-    },
-  ]
+  const mascotY = useTransform(scrollYProgress, [0, 1], ['0%', '10%'])
 
   return (
-    <section
-      id="top"
-      ref={ref}
-      className="grain relative flex min-h-[100svh] flex-col overflow-hidden bg-espresso text-cream"
-    >
-      <motion.div className="absolute inset-0" style={{ y: imgY }}>
-        <motion.img
-          src="/images/hero-cuppers.webp"
-          alt="Two coffee tasters leaning over a row of cupping bowls, concentrating on the aroma"
-          className="photo-mono h-full w-full object-cover object-[60%_center]"
-          style={{ scale: imgScale }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1.6, ease: EASE }}
-          fetchPriority="high"
-        />
-      </motion.div>
-      <div className="absolute inset-0 bg-linear-to-t from-espresso via-espresso/55 to-espresso/40" />
-      <div className="absolute inset-0 bg-linear-to-r from-espresso/80 via-espresso/20 to-transparent" />
+    <section id="top" ref={ref} className="waves relative overflow-hidden bg-blue text-white">
+      {/* gold shapes from the poster background */}
+      <Deco kind="flower" className="top-36 left-[3%] hidden w-24 md:block" />
+      <Deco kind="leaf" className="bottom-0 left-0 w-28 md:w-44" float={false} />
+      <Deco kind="leaves" className="top-0 right-0 hidden w-40 md:block lg:w-56" float={false} delay={0.3} />
 
-      <motion.div
-        style={{ y: contentY, opacity: contentOpacity }}
-        className="wrap relative z-10 flex flex-1 flex-col pt-24 pb-5 md:pt-28"
-      >
-        <div className="flex items-start justify-between gap-6">
-          <motion.h1
-            className="text-[clamp(1rem,2vw,1.5rem)] leading-[1.05] font-bold tracking-[-0.01em] uppercase"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, ease: EASE, delay: 0.2 }}
-          >
-            Cup Tasters
-            <br />
-            Championship
-            <span className="mt-2 flex items-center gap-3 text-[0.6em] font-semibold tracking-[0.4em] text-accent">
-              Nepal
-            </span>
-          </motion.h1>
-          <motion.p
-            className="eyebrow hidden text-right text-cream/60 md:block"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 0.5 }}
-          >
-            Organized by
-            <br />
-            <span className="text-cream">{event.organizer}</span>
-          </motion.p>
-        </div>
+      <div className="wrap relative pt-24 pb-10 md:pt-[min(6.5rem,11svh)] md:pb-[min(3rem,5svh)]">
+        <motion.div
+          initial={{ opacity: 0, y: -16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: EASE, delay: 0.1 }}
+        >
+          <OrganizedBy />
+        </motion.div>
 
-        <div className="relative mt-auto grid items-end gap-10 pt-10 lg:grid-cols-12">
-          <div className="min-w-0 lg:col-span-9">
-            <SplitLines
-              as="p"
-              animateOnMount
-              delay={0.35}
-              stagger={0.12}
-              className="display text-[clamp(2rem,min(10.5vw,14vh),10.5rem)]"
-              lines={['Three cups.', 'One', <span key="d" className="text-accent">difference.</span>]}
-            />
+        <div className="mt-6 grid items-center gap-6 md:mt-[min(2rem,3svh)] lg:grid-cols-[minmax(0,11fr)_minmax(0,13fr)] lg:gap-6">
+          {/* Lettering + copy */}
+          <div className="min-w-0 text-center lg:text-left">
+            <h1 className="mx-auto max-w-[min(620px,58svh)] lg:mx-0">
+              <Lockup animated />
+            </h1>
+
             <motion.div
-              className="mt-6 flex flex-col gap-6 md:mt-8 md:flex-row md:items-center md:gap-12"
-              initial={{ opacity: 0, y: 24 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, ease: EASE, delay: 1 }}
+              transition={{ duration: 0.9, ease: EASE, delay: 0.7 }}
             >
-              <p className="max-w-[17rem] text-[0.95rem] leading-relaxed text-cream/80 md:text-base">
-                A test of sensory skill, speed and precision.
+              <p className="lead mx-auto mt-[min(1.5rem,2.5svh)] max-w-md font-medium text-white/90 lg:mx-0">
+                Three cups. Two match, one doesn&rsquo;t. Find the odd one, fast. A test of sensory skill, speed
+                and precision.
               </p>
-              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-5">
-                <a
-                  href="#register"
-                  className="group inline-flex items-center justify-between gap-5 rounded-[3px] bg-accent px-5 py-3.5 text-[0.7rem] font-semibold tracking-[0.18em] uppercase transition-colors hover:bg-cream hover:text-espresso sm:text-xs"
-                >
+              <div className="mt-[min(1.75rem,3svh)] flex flex-col items-stretch gap-3 sm:flex-row sm:justify-center lg:justify-start">
+                <a href="#register" className="btn sticker group bg-yellow text-navy hover:bg-white">
                   Register to compete
                   <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
                 </a>
-                <a
-                  href="#about"
-                  className="group inline-flex items-center gap-3 py-3 text-[0.7rem] font-semibold tracking-[0.18em] text-cream/80 uppercase hover:text-cream sm:text-xs"
-                >
-                  Explore the championship
+                <a href="#about" className="btn group border-white text-white hover:bg-white hover:text-blue">
+                  How it works
                   <span className="transition-transform duration-300 group-hover:translate-y-1">↓</span>
                 </a>
               </div>
             </motion.div>
           </div>
-          <div className="pointer-events-none absolute right-0 bottom-24 hidden w-[min(24vw,320px)] lg:block">
-            <HeroTriangle />
-          </div>
+
+          {/* Mascots, with the tagline brush over the steam as on the poster */}
+          <motion.div className="relative mx-auto w-full max-w-[min(720px,72svh)] pt-12 lg:pt-0" style={{ y: mascotY }}>
+            <div className="relative">
+              <motion.img
+                src="/images/poster/mascots.webp"
+                alt="Cartoon coffee bean, cupping cup and yellow mug mascots tasting from three cups numbered 1, 2 and 1"
+                width={1800}
+                height={1341}
+                className="w-full"
+                initial={{ opacity: 0, y: 60 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ type: 'spring', stiffness: 90, damping: 14, delay: 0.5 }}
+                fetchPriority="high"
+              />
+              <motion.img
+                src="/images/poster/tagline.webp"
+                alt={event.tagline}
+                width={900}
+                height={156}
+                className="absolute top-0 left-[22%] w-[57%] -translate-y-[12%]"
+                initial={{ opacity: 0, scaleX: 0.2, rotate: -8 }}
+                animate={{ opacity: 1, scaleX: 1, rotate: -2 }}
+                transition={{ type: 'spring', stiffness: 140, damping: 13, delay: 1 }}
+              />
+            </div>
+          </motion.div>
         </div>
 
-        <motion.dl
-          className="mt-8 grid grid-cols-1 border-t border-cream/20 sm:grid-cols-3 md:mt-10"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 1.3 }}
-        >
-          {info.map((item, i) => (
-            <div
-              key={item.label}
-              className={`grid grid-cols-[6.5rem_minmax(0,1fr)] items-baseline gap-3 py-2.5 sm:block sm:py-4 ${
-                i > 0 ? 'border-t border-cream/10 sm:border-t-0 sm:border-l sm:pl-5' : ''
-              }`}
-            >
-              <dt className="eyebrow text-cream/55">{item.label}</dt>
-              <dd className="text-[0.85rem] font-medium sm:mt-1.5 md:text-[0.95rem]">
-                {item.value ?? <Tba>{item.fallback ?? 'To be announced'}</Tba>}
-              </dd>
-            </div>
-          ))}
-        </motion.dl>
-      </motion.div>
+        <div className="mt-10 md:mt-[min(3rem,5svh)]">
+          <EventStrip />
+        </div>
+      </div>
     </section>
   )
 }

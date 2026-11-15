@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# cPanel bundle (npm run package)
+cup-tasters-deploy.zip
+deploy
+cup-tasters-database.sql

@@ -37,6 +37,8 @@ export interface Round {
   title: string
   description: string
   image: string
+  /** Short chip under the description, e.g. "2024: top 12". */
+  note?: string
   details: RoundDetail[]
 }
 
@@ -57,12 +59,15 @@ export interface ArchiveEdition {
   date: string
   /** Optional short line, e.g. season or presenting organization. */
   subtitle?: string
-  image: { src: string; alt: string; credit: string }
+  /** `position` is a CSS object-position for photos that aren't 4:3. */
+  image: { src: string; alt: string; credit: string; position?: string }
   results: Placing[]
   /** Only numbers published by the organizers for that edition. */
   stats: ArchiveStat[]
   formatNote?: string
   links: LinkItem[]
+  /** Organizations credited on that edition's official banner. */
+  organizers?: { name: string; logo: string }[]
 }
 
 export interface Sponsor {
@@ -79,8 +84,8 @@ export interface GalleryImage {
   credit: string
   /** `event` = photographed at a Barista's Coffee School event. */
   source: 'event' | 'reference'
-  /** Tailwind grid-span classes for the desktop editorial grid. */
-  span: string
+  /** Portrait photos are kept out of the 16:9 bento tiles (viewer only). */
+  orientation?: 'landscape' | 'portrait'
 }
 
 /* ── Current edition ───────────────────────────────────────────────────────── */
@@ -88,45 +93,74 @@ export interface GalleryImage {
 export const event = {
   name: 'Cup Tasters Championship',
   country: 'Nepal',
-  /** e.g. 2026 — leave null until the edition year is confirmed. */
-  year: null as number | null,
+  /** Confirmed by the official 2026 poster. */
+  year: 2026 as number | null,
+  /** Line from the official 2026 poster. */
+  tagline: 'Nepal’s biggest coffee tasting challenge!',
 
   date: {
     /** Human label, e.g. "Saturday, 14 March 2026". */
-    label: null as string | null,
+    label: 'Saturday, 26 December 2026' as string | null,
     /** ISO start date for structured data, e.g. "2026-03-14T09:00:00+05:45". */
-    startISO: null as string | null,
+    startISO: '2026-12-26T09:00:00+05:45' as string | null,
     endISO: null as string | null,
+    /**
+     * Working date shared by the organizers ("after Tihar, 26 Dec for now,
+     * not fixed"). Drives the countdown, always shown as tentative. Clear it
+     * once `startISO` is confirmed.
+     */
+    tentativeISO: null as string | null,
+    tentativeLabel: null as string | null,
   },
 
   venue: {
-    name: null as string | null,
-    address: null as string | null,
-    mapUrl: null as string | null,
+    name: 'Heritage Garden' as string | null,
+    address: 'Sanepa, Lalitpur' as string | null,
+    mapUrl: 'https://www.google.com/maps/search/?api=1&query=Heritage+Garden+Sanepa+Lalitpur' as string | null,
   },
 
-  city: 'Kathmandu, Nepal',
+  city: 'Lalitpur, Nepal',
   organizer: "The Barista's Coffee School",
+  /** "Event organized by", from the official 2026 poster. */
+  /* `href` opens in a new tab. Only BCS is a verified official site; the
+     others are best available links for now — replace with official sites. */
+  organizers: [
+    { name: "The Barista's Coffee School", logo: '/images/partners/bcs.webp', href: 'https://baristascoffeeschool.com.np/' },
+    { name: 'Jewel Himalayan Products', logo: '/images/partners/jewel-himalayan.webp', href: 'https://www.facebook.com/115726014446303' },
+    { name: 'Lekali Coffee Estate', logo: '/images/partners/lekali.webp', href: 'https://lekalicoffee.com/' },
+    { name: 'Lakecity Coffee', logo: '/images/partners/lakecity.webp', href: 'https://www.google.com/search?q=Lakecity+Coffee+Nepal' },
+  ] as { name: string; logo: string; href?: string }[],
 
   registration: {
-    status: 'tba' as RegistrationStatus,
+    /* The 2026 poster announces the championship as "Coming soon". */
+    status: 'coming-soon' as RegistrationStatus,
     /** Free text shown next to the status, e.g. "Closes 1 March 2026". */
     note: null as string | null,
     /** Keep the form usable even before the official opening. */
     acceptingApplications: true,
     /**
-     * POST endpoint for the application form (Formspree, Google Apps Script,
-     * your own API…). Receives multipart/form-data. While null, the form runs
+     * POST endpoint for the application form: the PHP admin's
+     * `api/register.php`, set via VITE_REGISTER_ENDPOINT in `.env.local`. Receives multipart/form-data. While null, the form runs
      * in preview mode: it validates and shows the success state but sends
      * nothing.
      */
-    formEndpoint: null as string | null,
+    formEndpoint: (import.meta.env.VITE_REGISTER_ENDPOINT as string | undefined) ?? null,
   },
 
   /** Registration fee, e.g. "NPR 1,500". null → TBA. Never invent one. */
-  fee: null as string | null,
+  fee: 'Rs 3,000 (Three Thousand Rupees)' as string | null,
   /** Prize information. null → TBA. */
   prize: null as string | null,
+  /** Number of winners in this edition. */
+  winners: 4,
+  /** Payment help + where to send the payment statement. */
+  payment: {
+    contactName: 'Sijal',
+    phone: '9761887079',
+    whatsappUrl: 'https://wa.me/9779761887079',
+    /** Drop the payment QR image at public/images/qr.jpeg. */
+    qrImage: '/images/qr.jpeg',
+  },
 }
 
 export const registrationStatusLabel: Record<RegistrationStatus, string> = {
@@ -139,47 +173,37 @@ export const registrationStatusLabel: Record<RegistrationStatus, string> = {
 /* ── Competition format ────────────────────────────────────────────────────── */
 
 export const format = {
+  /* Round structure of the last edition (2024). Notes quote the 2024 numbers. */
   rounds: [
     {
       number: '01',
-      title: 'Qualify',
-      description: 'Competitors face the first round of triangulation tests.',
-      image: '/images/cupping-lab.webp',
+      title: 'Elimination round',
+      description: 'Everyone starts at the same table. Find the odd cup, fast. Only the sharpest palates move on.',
+      image: '/images/cupping-table.webp',
+      note: 'Open to all competitors',
       details: [
         { label: 'Triangulations', value: null },
         { label: 'Time limit', value: null },
-        { label: 'Advancing', value: null },
       ],
     },
     {
       number: '02',
-      title: 'Advance',
-      description:
-        'The strongest performers move forward according to the official competition rules.',
-      image: '/images/cupper-closeup.webp',
-      details: [
-        { label: 'Ranking', value: null },
-        { label: 'Tie-break', value: null },
-      ],
-    },
-    {
-      number: '03',
       title: 'Semi-final',
-      description: 'The remaining competitors face a more demanding sensory challenge.',
-      image: '/images/cupping-round-table.webp',
+      description: 'The top performers return to a tougher table, where every second and every sip counts.',
+      image: '/images/cupper-closeup.webp',
+      note: '2024: top 12',
       details: [
-        { label: 'Competitors', value: null },
         { label: 'Triangulations', value: null },
         { label: 'Time limit', value: null },
       ],
     },
     {
-      number: '04',
+      number: '03',
       title: 'Final',
-      description: 'The finalists compete for the Cup Tasters Championship title.',
+      description: 'The finalists face the last table on stage. In 2026 there will be 4 winners, and you could be one of them.',
       image: '/images/bcs-2024-podium.webp',
+      note: '2026: 4 winners',
       details: [
-        { label: 'Finalists', value: null },
         { label: 'Triangulations', value: null },
         { label: 'Time limit', value: null },
       ],
@@ -192,7 +216,7 @@ export const format = {
 export const rules = {
   summary: 'Official competition rules will be published by the organizers.',
   /** Link to the official PDF for this edition once uploaded. */
-  pdfUrl: null as string | null,
+  pdfUrl: '/rules-and-regulations-2026.pdf' as string | null,
   previous: [
     {
       label: 'Rules & Regulations 2024',
@@ -209,12 +233,12 @@ export const rules = {
 
 export const eligibility = {
   audiences: [
-    'Baristas',
-    'Roasters',
-    'Brewers',
-    'Coffee professionals',
-    'Students',
-    'Coffee enthusiasts',
+    { name: 'Professional baristas', text: 'Behind the bar every day? Put your palate to the test.' },
+    { name: 'Roasters & brewers', text: 'You shape the flavour. Now prove you can spot it.' },
+    { name: 'Café owners & managers', text: 'Lead by example and show your team how it’s done.' },
+    { name: 'Students & trainees', text: 'New to coffee? A great way to train your senses.' },
+    { name: 'Industry experts', text: 'Q graders, cuppers and coffee buyers welcome.' },
+    { name: 'Coffee enthusiasts', text: 'Love coffee? That’s all the qualification you need.' },
   ],
   /** Add only officially confirmed requirements. */
   requirements: [] as string[],
@@ -249,15 +273,17 @@ export const archive: ArchiveEdition[] = [
     formatNote: 'Elimination round → Semi-final (top 12) → Final (top 4).',
     links: [
       {
-        label: 'Event page',
-        href: 'https://baristascoffeeschool.com.np/cup-tasters-championship-2024-nepal/',
-      },
-      { label: 'Rules 2024 (PDF)', href: rules.previous[0].href },
-      {
         label: 'Scoresheet (PDF)',
         href: 'https://baristascoffeeschool.com.np/wp-content/uploads/2024/06/Cup-Tasters-Scoresheet-pdf.pdf',
       },
       { label: 'Watch the live stream', href: 'https://www.youtube.com/watch?v=GmVzLe3HoqI' },
+    ],
+    /* "Event organized by", from the official Cup Tasters Championship 2024 banner. */
+    organizers: [
+      { name: "The Barista's Coffee School", logo: '/images/partners/bcs.webp' },
+      { name: 'Jewel Himalayan Products', logo: '/images/partners/jewel-himalayan.webp' },
+      { name: 'Lekali Coffee Estate', logo: '/images/partners/lekali.webp' },
+      { name: 'Lakecity Coffee', logo: '/images/partners/lakecity.webp' },
     ],
   },
   {
@@ -269,6 +295,7 @@ export const archive: ArchiveEdition[] = [
       src: '/images/bcs-2022-winners.webp',
       alt: 'The winners of the Cup Tasters Throwdown 2022 holding their trophies',
       credit: "The Barista's Coffee School",
+      position: 'center 30%',
     },
     results: [
       { place: 'Champion', name: 'Bhupal Khatri' },
@@ -296,66 +323,226 @@ export const archive: ArchiveEdition[] = [
 /* Add confirmed partners only, e.g.                                           */
 /* { name: 'Brand', logo: '/images/sponsors/brand.svg', href: 'https://…', tier: 'Title partner' } */
 
-export const sponsors: Sponsor[] = []
-/** Empty partner placeholders shown while `sponsors` is empty. */
-export const partnerSlots = 2
+export const sponsors: Sponsor[] = [
+]
+/** 2026 sponsorship line-up, shown right above the gallery. `name: null` → "To be determined". */
+export const sponsorTiers: { tier: string; name: string | null; logo: string | null; href?: string }[] = [
+  { tier: 'Presented by', name: 'Katmandu Coffee', logo: '/images/sponsors/katmandu-coffee.svg', href: 'https://katmanducoffee.com/' },
+  { tier: 'Brought to you by', name: 'Himalayan Java Coffee', logo: '/images/sponsors/himalayan-java.png', href: 'https://himalayanjava.com/' },
+  { tier: 'Partner', name: null, logo: null },
+]
+
+/** "Become a sponsor" enquiries go to this number on WhatsApp. */
+export const sponsorContact = { name: 'Sijal', phone: '9761887079', whatsapp: '9779761887079' }
+
+/** Where the "Become a sponsor" form posts: the PHP API's sponsor.php, next to register.php. null → WhatsApp only. */
+export const sponsorEndpoint =
+  (import.meta.env.VITE_SPONSOR_ENDPOINT as string | undefined) ??
+  event.registration.formEndpoint?.replace(/register\.php$/, 'sponsor.php') ??
+  null
+
+/** Who the 2026 edition is open to (shown in the event strip). */
+export const openTo = 'Baristas, coffee professionals & enthusiasts'
 
 /* ── Gallery ───────────────────────────────────────────────────────────────── */
 /* Replace `reference` photos with official event photography as it arrives.  */
 
 export const gallery: GalleryImage[] = [
   {
-    src: '/images/bcs-2024-podium.webp',
-    alt: 'Finalists lifting their trophies at the Cup Tasters Championship 2024',
-    caption: 'Finalists, Cup Tasters Championship 2024',
+    src: '/images/gallery/34.webp',
+    alt: 'The 2024 winners raise their trophies',
+    caption: 'The 2024 winners raise their trophies',
     credit: "The Barista's Coffee School",
     source: 'event',
-    span: 'md:col-span-6 md:row-span-4',
   },
   {
-    src: '/images/bcs-cupping-spoon.webp',
-    alt: 'A cupping spoon breaking the crust of a coffee in a cupping bowl',
-    caption: 'Breaking the crust',
+    src: '/images/gallery/35.webp',
+    alt: 'Everyone together at the end of the 2024 championship',
+    caption: 'Everyone together at the end of the 2024 championship',
     credit: "The Barista's Coffee School",
     source: 'event',
-    span: 'md:col-span-3 md:row-span-4',
   },
   {
-    src: '/images/taster-smelling.webp',
-    alt: 'A taster smelling coffee from a cupping spoon',
-    caption: 'Aroma first',
-    credit: 'UC Davis College of Engineering · CC BY 2.0',
-    source: 'reference',
-    span: 'md:col-span-3 md:row-span-4',
+    src: '/images/gallery/01.webp',
+    alt: 'Competitors tasting on stage',
+    caption: 'Competitors tasting on stage',
+    credit: "The Barista's Coffee School",
+    source: 'event',
   },
   {
-    src: '/images/cupping-table.webp',
-    alt: 'A taster moving along a long table of cupping bowls',
-    caption: 'Along the cupping table',
-    credit: 'Visitor7 · CC BY-SA 3.0',
-    source: 'reference',
-    span: 'md:col-span-5 md:row-span-3',
+    src: '/images/gallery/21.webp',
+    alt: 'Competitors at the cupping tables on stage',
+    caption: 'Competitors at the cupping tables on stage',
+    credit: "The Barista's Coffee School",
+    source: 'event',
   },
   {
-    src: '/images/cupping-round-table.webp',
-    alt: 'Tasters at a round table of cupping bowls and green coffee samples',
-    caption: 'The round table',
-    credit: 'Rpdecamps · CC BY 3.0',
-    source: 'reference',
-    span: 'md:col-span-4 md:row-span-3',
+    src: '/images/gallery/02.webp',
+    alt: 'A competitor raises the odd cup',
+    caption: 'A competitor raises the odd cup',
+    credit: "The Barista's Coffee School",
+    source: 'event',
   },
   {
-    src: '/images/cupper-closeup.webp',
-    alt: 'Close-up of a taster bending over a cupping bowl',
-    caption: 'Close attention',
-    credit: 'Visitor7 · CC BY-SA 3.0',
-    source: 'reference',
-    span: 'md:col-span-3 md:row-span-3',
+    src: '/images/gallery/33.webp',
+    alt: 'Finalists celebrating on stage',
+    caption: 'Finalists celebrating on stage',
+    credit: "The Barista's Coffee School",
+    source: 'event',
+  },
+  {
+    src: '/images/gallery/03.webp',
+    alt: 'Competitors lined up at the tables',
+    caption: 'Competitors lined up at the tables',
+    credit: "The Barista's Coffee School",
+    source: 'event',
+  },
+  {
+    src: '/images/gallery/20.webp',
+    alt: 'Showing the odd cup',
+    caption: 'Showing the odd cup',
+    credit: "The Barista's Coffee School",
+    source: 'event',
+  },
+  {
+    src: '/images/gallery/04.webp',
+    alt: 'Tasting along the cupping table',
+    caption: 'Tasting along the cupping table',
+    credit: "The Barista's Coffee School",
+    source: 'event',
+  },
+  {
+    src: '/images/gallery/18.webp',
+    orientation: 'portrait',
+    alt: 'Tasting at the cupping table',
+    caption: 'Tasting at the cupping table',
+    credit: "The Barista's Coffee School",
+    source: 'event',
+  },
+  {
+    src: '/images/gallery/05.webp',
+    alt: 'Semi-final tasting',
+    caption: 'Semi-final tasting',
+    credit: "The Barista's Coffee School",
+    source: 'event',
+  },
+  {
+    src: '/images/gallery/23.webp',
+    alt: 'Celebrating the right pick',
+    caption: 'Celebrating the right pick',
+    credit: "The Barista's Coffee School",
+    source: 'event',
+  },
+  {
+    src: '/images/gallery/07.webp',
+    alt: 'Showing the pick to the judges',
+    caption: 'Showing the pick to the judges',
+    credit: "The Barista's Coffee School",
+    source: 'event',
+  },
+  {
+    src: '/images/gallery/22.webp',
+    alt: 'Final-round tasting on stage',
+    caption: 'Final-round tasting on stage',
+    credit: "The Barista's Coffee School",
+    source: 'event',
+  },
+  {
+    src: '/images/gallery/08.webp',
+    alt: 'Racing the clock at the table',
+    caption: 'Racing the clock at the table',
+    credit: "The Barista's Coffee School",
+    source: 'event',
+  },
+  {
+    src: '/images/gallery/32.webp',
+    alt: 'Head to head at the cupping table',
+    caption: 'Head to head at the cupping table',
+    credit: "The Barista's Coffee School",
+    source: 'event',
+  },
+  {
+    src: '/images/gallery/12.webp',
+    alt: 'Celebrating a correct pick',
+    caption: 'Celebrating a correct pick',
+    credit: "The Barista's Coffee School",
+    source: 'event',
+  },
+  {
+    src: '/images/gallery/19.webp',
+    orientation: 'portrait',
+    alt: 'A competitor smells a cup before tasting',
+    caption: 'A competitor smells a cup before tasting',
+    credit: "The Barista's Coffee School",
+    source: 'event',
+  },
+  {
+    src: '/images/gallery/14.webp',
+    alt: 'A competitor speaks to the crowd',
+    caption: 'A competitor speaks to the crowd',
+    credit: "The Barista's Coffee School",
+    source: 'event',
+  },
+  {
+    src: '/images/gallery/26.webp',
+    alt: 'Calling out the pick',
+    caption: 'Calling out the pick',
+    credit: "The Barista's Coffee School",
+    source: 'event',
+  },
+  {
+    src: '/images/gallery/15.webp',
+    alt: 'Finalists celebrating',
+    caption: 'Finalists celebrating',
+    credit: "The Barista's Coffee School",
+    source: 'event',
+  },
+  {
+    src: '/images/gallery/17.webp',
+    alt: 'Visitors arriving at the venue',
+    caption: 'Visitors arriving at the venue',
+    credit: "The Barista's Coffee School",
+    source: 'event',
+  },
+  {
+    src: '/images/gallery/24.webp',
+    alt: 'Prize presentation on stage',
+    caption: 'Prize presentation on stage',
+    credit: "The Barista's Coffee School",
+    source: 'event',
+  },
+  {
+    src: '/images/gallery/27.webp',
+    alt: 'Trophy presentation to a partner',
+    caption: 'Trophy presentation to a partner',
+    credit: "The Barista's Coffee School",
+    source: 'event',
+  },
+  {
+    src: '/images/gallery/28.webp',
+    alt: 'Trophy presentation',
+    caption: 'Trophy presentation',
+    credit: "The Barista's Coffee School",
+    source: 'event',
+  },
+  {
+    src: '/images/gallery/11.webp',
+    alt: 'Competitors tasting on stage',
+    caption: 'Competitors tasting on stage',
+    credit: "The Barista's Coffee School",
+    source: 'event',
+  },
+  {
+    src: '/images/gallery/16.webp',
+    alt: 'Finalists on stage',
+    caption: 'Finalists on stage',
+    credit: "The Barista's Coffee School",
+    source: 'event',
   },
 ]
 
 export const galleryNote =
-  'From previous Barista’s Coffee School competitions. Photos marked “Reference” are documentary cupping photography, to be replaced with official event images.'
+  'Moments from previous Barista’s Coffee School competitions and cupping sessions.'
 
 /* ── Organizer ─────────────────────────────────────────────────────────────── */
 
@@ -377,12 +564,19 @@ export const social: LinkItem[] = [
   { label: 'Contact', href: 'https://baristascoffeeschool.com.np/contact-2/' },
 ]
 
+/** "Past Events" in the navbar opens the organizer's events page. */
+export const pastEventsUrl = 'https://baristascoffeeschool.com.np/events/'
+/** Live-stream recordings on the organizer's YouTube channel. */
+export const liveVideosUrl = 'https://www.youtube.com/@Baristascoffeeschool/streams'
+
 export const contactUrl = 'https://baristascoffeeschool.com.np/contact-2/'
 
 /* ── Photo credits (shown in the footer) ───────────────────────────────────── */
 
 export const photoCredits: string[] = [
   "Event photography: The Barista's Coffee School",
+  "Mascots, lettering and background art: official Cup Tasters Championship 2026 poster, The Barista's Coffee School",
+  "2024 organizer logos: official Cup Tasters Championship 2024 banner",
   'Two tasters over cupping bowls ("Fancy a cupper"): DFID, UK Department for International Development, CC BY 2.0, via Wikimedia Commons',
   'Coffee Cupping series: Visitor7, CC BY-SA 3.0, via Wikimedia Commons',
   "Peet's Cupping: UC Davis College of Engineering, CC BY 2.0, via Wikimedia Commons",

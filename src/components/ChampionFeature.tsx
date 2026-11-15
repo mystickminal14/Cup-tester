@@ -1,7 +1,34 @@
+import { motion } from 'framer-motion'
 import type { ArchiveEdition } from '../data/event'
 import { CupMark, SplitLines } from './ui'
 
-/** Sports-style profile of an edition's champion, with the big "01" behind the name. */
+const outline = 'text-transparent [-webkit-text-stroke:1.5px_var(--c-outline)]'
+
+/** Giant outlined rank behind the name, like a sports profile. */
+function RankMark() {
+  return (
+    <span
+      className={`headline pointer-events-none absolute -top-[0.08em] right-0 text-[clamp(5rem,min(11vw,19svh),10rem)] leading-none select-none ${outline}`}
+      aria-hidden="true"
+    >
+      01
+    </span>
+  )
+}
+
+function Kicker({ children }: { children: React.ReactNode }) {
+  return (
+    <p className="eyebrow relative flex items-center gap-2.5 text-(--c-accent)">
+      <CupMark size={18} stroke="var(--c-ink)" />
+      {children}
+    </p>
+  )
+}
+
+const nameClass =
+  'headline relative mt-3 text-[clamp(2rem,min(3.6vw,7.5svh),3.6rem)] leading-[0.95] text-(--c-ink) lg:whitespace-nowrap'
+
+/** Sports-style profile of an edition's champion. */
 export function ChampionFeature({ edition }: { edition: ArchiveEdition }) {
   const champ = edition.results[0]
   if (!champ) return null
@@ -9,30 +36,103 @@ export function ChampionFeature({ edition }: { edition: ArchiveEdition }) {
 
   return (
     <div className="relative min-w-0">
-      <span
-        className="text-outline-cream pointer-events-none absolute -top-[0.12em] right-0 text-[clamp(5.5rem,13vw,11rem)] leading-none font-extrabold tracking-[-0.08em] select-none"
-        aria-hidden="true"
-      >
-        01
-      </span>
-      <p className="eyebrow relative flex items-center gap-3 text-accent">
-        <CupMark size={18} stroke="var(--color-cream)" />
-        {edition.year} Champion
-      </p>
+      <RankMark />
+      <Kicker>{edition.year} Champion</Kicker>
       <SplitLines
         as="h3"
-        className="display relative mt-4 text-[clamp(2.25rem,5.2vw,4.75rem)] break-words"
-        lines={[first, rest.join(' ')]}
+        className={nameClass}
+        lines={[
+          <span key="n">
+            {first} <span className="text-(--c-accent)">{rest.join(' ')}</span>
+          </span>,
+        ]}
         stagger={0.1}
       />
-      <p className="relative mt-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-[0.95rem] font-medium">
+      <p className="relative mt-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-[0.95rem] font-semibold">
         Winner, {edition.title}
         {champ.note && (
-          <span className="rounded-full border border-cream/25 px-2.5 py-0.5 text-[0.7rem] font-medium text-cream/70">
+          <span className="rounded-full border border-(--c-line) px-2.5 py-0.5 text-[0.7rem] font-bold text-(--c-muted)">
             {champ.note}
           </span>
         )}
       </p>
+    </div>
+  )
+}
+
+/** The upcoming edition's empty podium: "It can be you." */
+export function NextChampionFigure() {
+  return (
+    <figure className="min-w-0">
+      <div className="relative flex aspect-[4/3] flex-col items-center overflow-hidden rounded-[1.5rem] bg-navy px-6 pt-[6%] text-center ring-2 ring-white/15">
+        {/* spotlight */}
+        <span className="pointer-events-none absolute -top-1/3 left-1/2 h-[140%] w-[70%] -translate-x-1/2 rounded-[50%] bg-radial from-yellow/35 to-transparent to-70%" />
+        <motion.span
+          className="headline relative text-[clamp(3.2rem,8vw,6rem)] leading-none text-yellow headline-shadow"
+          animate={{ rotate: [-4, 4, -4] }}
+          transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
+          aria-hidden="true"
+        >
+          ?
+        </motion.span>
+        <p className="headline relative mt-1 text-[clamp(1.9rem,4.4vw,3.3rem)] text-white headline-shadow">
+          It can be <span className="text-yellow">you!</span>
+        </p>
+        <motion.img
+          src="/images/poster/mascots.webp"
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          className="absolute -bottom-[5%] left-1/2 w-[52%] -translate-x-1/2"
+          initial={{ y: 40, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ type: 'spring', stiffness: 90, damping: 14, delay: 0.2 }}
+        />
+      </div>
+      <figcaption className="eyebrow mt-3 text-(--c-muted)">Artwork: Cup Tasters Championship 2026 poster</figcaption>
+    </figure>
+  )
+}
+
+export function NextChampionDetails({ year }: { year: number }) {
+  return (
+    <div className="relative flex min-w-0 flex-col">
+      <RankMark />
+      <Kicker>{year} Champion</Kicker>
+      <SplitLines
+        as="h3"
+        className={nameClass}
+        lines={[
+          <span key="n">
+            Your name <span className="text-(--c-accent)">here.</span>
+          </span>,
+        ]}
+        stagger={0.1}
+      />
+      <p className="relative mt-4 max-w-md text-[0.98rem] font-medium text-(--c-text)">
+        The {year} podium is empty. Sharpen your senses, trust your palate and claim the title of Nepal&rsquo;s best cup
+        taster.
+      </p>
+
+      <ol className="mt-6 border-t border-(--c-line)">
+        {['Champion', '2nd', '3rd'].map((place, i) => (
+          <li
+            key={place}
+            className="grid grid-cols-[2rem_minmax(0,1fr)_auto] items-baseline gap-3 border-b border-(--c-line) py-3"
+          >
+            <span className="text-sm font-bold text-(--c-muted) tabular-nums">0{i + 1}</span>
+            <span className="text-[clamp(0.9rem,1.3vw,1.05rem)] font-bold text-(--c-muted) uppercase">
+              It can be you
+            </span>
+            <span className="eyebrow text-(--c-muted)">{place}</span>
+          </li>
+        ))}
+      </ol>
+
+      <a href="#register" className="btn sticker group mt-8 self-start bg-yellow text-navy hover:bg-red-deep hover:text-white">
+        Claim your spot
+        <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
+      </a>
     </div>
   )
 }
