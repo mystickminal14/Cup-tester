@@ -11,6 +11,7 @@ import {
   type ReactNode,
 } from 'react'
 import { contactUrl, event } from '../data/event'
+import { emailReady, sendEmail } from '../lib/sendEmail'
 import { EventDetails } from './EventDetails'
 import { EASE, SectionLabel, SplitLines, SteamCup } from './ui'
 
@@ -54,6 +55,7 @@ const initial: Values = {
 }
 
 const MAX_PHOTO_MB = 5
+
 
 const experienceOptions = [
   'Less than 1 year',
@@ -479,15 +481,76 @@ export function RegistrationForm() {
       return
     }
     // Honeypot: bots fill hidden fields.
-    if ((formRef.current?.elements.namedItem('website') as HTMLInputElement | null)?.value) return
+    if ((formRef.current?.elements.namedItem('bcs_hp_x9') as HTMLInputElement | null)?.value) return
 
     setStatus('sending')
     try {
       const endpoint = event.registration.formEndpoint
+
+      // Upload the photo first so the email can link to it. If the upload
+      // fails, the application is still sent, just without the photo link.
+      let uploadedPhotoUrl = ''
+      if (photo && event.registration.cloudinary.cloudName) {
+        try {
+          const up = new FormData()
+          up.append('file', photo)
+          up.append('upload_preset', event.registration.cloudinary.uploadPreset)
+          up.append('folder', 'cup-tasters')
+          const r = await fetch(`https://api.cloudinary.com/v1_1/${event.registration.cloudinary.cloudName}/image/upload`, { method: 'POST', body: up })
+          if (r.ok) uploadedPhotoUrl = ((await r.json()) as { secure_url: string }).secure_url
+        } catch {
+          // network error: carry on without the photo link
+        }
+      }
+
+      if (emailReady) {
+        const yes = (b: boolean) => (b ? 'Yes' : 'No')
+        await sendEmail({
+          subject: `New Cup Tasters registration: ${values.fullName.trim()} (${values.city.trim()})`,
+          heading: 'New competitor registration',
+          replyTo: values.email.trim(),
+          sections: [
+            {
+              title: '01 · About you',
+              rows: [
+                ['Full name', values.fullName.trim()],
+                ['Email', values.email.trim()],
+                ['Phone', values.phone.trim()],
+                ['City', values.city.trim()],
+              ],
+            },
+            {
+              title: '02 · Coffee background',
+              rows: [
+                ['Coffee shop / organization', values.organization.trim()],
+                ['Role / position', values.role.trim()],
+                ['Coffee experience', values.experience],
+                ['Instagram / social', values.social.trim()],
+                ['T-shirt size', values.tshirtSize],
+                ['Bio', values.bio.trim()],
+              ],
+            },
+            {
+              title: '03 · Championship',
+              rows: [
+                ['Previous competitions', values.previousCompetition.trim()],
+                ['Heard about it from', values.heardFrom],
+                ['Press / photo consent', yes(values.pressConsent)],
+                ['Profile photo', uploadedPhotoUrl ? 'Uploaded (below)' : photo ? 'Upload failed: ask the applicant to email it' : 'Not provided'],
+              ],
+            },
+          ],
+          photoUrl: uploadedPhotoUrl || undefined,
+          footer: 'Applicant confirmed the information is accurate',
+        })
+      }
+
+      // Admin panel / backend submission (runs alongside the email when formEndpoint is set).
       if (endpoint) {
         const data = new FormData()
         Object.entries(values).forEach(([k, v]) => data.append(k, String(v)))
         if (photo) data.append('photo', photo)
+        if (uploadedPhotoUrl) data.append('photoUrl', uploadedPhotoUrl)
         data.append('submittedAt', new Date().toISOString())
         const res = await fetch(endpoint, { method: 'POST', body: data, headers: { Accept: 'application/json' } })
         if (!res.ok) throw new Error(`HTTP ${res.status}`)
@@ -496,7 +559,7 @@ export function RegistrationForm() {
         writePending(p)
         setPending(p)
       } else {
-        await new Promise((r) => setTimeout(r, 900))
+        if (!emailReady) await new Promise((r) => setTimeout(r, 900))
         setPending({ id: 0, token: '', name: values.fullName.trim() })
       }
       setStatus('idle')
@@ -620,7 +683,7 @@ export function RegistrationForm() {
               <Success
                 key="ok"
                 name={registeredName}
-                preview={!event.registration.formEndpoint}
+                preview={!emailReady && !event.registration.formEndpoint}
                 onReset={reset}
               />
             ) : pending ? (
@@ -652,7 +715,8 @@ export function RegistrationForm() {
                 {/* honeypot */}
                 <div className="absolute -left-[9999px]" aria-hidden="true">
                   <label>
-                    Website <input type="text" name="website" tabIndex={-1} autoComplete="off" />
+                    {/* Non-semantic name/label so browser autofill never fills it (it used to be "website"). */}
+                    Leave this empty <input type="text" name="bcs_hp_x9" tabIndex={-1} autoComplete="new-password" defaultValue="" />
                   </label>
                 </div>
 
@@ -944,8 +1008,11 @@ export function RegistrationForm() {
                       ) : (
                         <span />
                       )}
+                      {/* Distinct keys: without them React reuses one <button> and flips it to
+                          type="submit" mid-click, so "Next: Photo" submitted the form. */}
                       {last ? (
                         <button
+                          key="submit"
                           type="submit"
                           disabled={status === 'sending'}
                           className="btn group shrink-0 bg-blue py-4 whitespace-nowrap text-yellow shadow-[0_6px_0_-1px_var(--color-yellow)] hover:bg-red-deep hover:text-white disabled:opacity-70"
@@ -959,6 +1026,7 @@ export function RegistrationForm() {
                         </button>
                       ) : (
                         <button
+                          key="next"
                           type="button"
                           onClick={next}
                           className="btn group shrink-0 bg-blue text-white hover:bg-red-deep"

@@ -145,6 +145,26 @@ export const event = {
      * nothing.
      */
     formEndpoint: (import.meta.env.VITE_REGISTER_ENDPOINT as string | undefined) ?? null,
+    /**
+     * EmailJS (https://www.emailjs.com). When all three are set, every
+     * application is also emailed. Set them in `.env.local`
+     * (VITE_EMAILJS_SERVICE_ID, VITE_EMAILJS_TEMPLATE_ID, VITE_EMAILJS_PUBLIC_KEY).
+     * The recipient address lives in the EmailJS template's "To Email" setting.
+     */
+    emailjs: {
+      serviceId: (import.meta.env.VITE_EMAILJS_SERVICE_ID as string | undefined) ?? '',
+      templateId: (import.meta.env.VITE_EMAILJS_TEMPLATE_ID as string | undefined) ?? '',
+      publicKey: (import.meta.env.VITE_EMAILJS_PUBLIC_KEY as string | undefined) ?? '',
+    },
+    /**
+     * Cloudinary unsigned upload for the profile photo. The photo is uploaded
+     * from the browser and its link is sent in the email as {{photo_url}}.
+     * Never put the Cloudinary API secret here: this code runs in the browser.
+     */
+    cloudinary: {
+      cloudName: (import.meta.env.VITE_CLOUDINARY_CLOUD_NAME as string | undefined) ?? '',
+      uploadPreset: (import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET as string | undefined) ?? '',
+    },
   },
 
   /** Registration fee, e.g. "NPR 1,500". null → TBA. Never invent one. */

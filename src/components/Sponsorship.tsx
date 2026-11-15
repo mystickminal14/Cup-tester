@@ -2,6 +2,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { Check, Loader2, Phone, Send, X } from 'lucide-react'
 import { useCallback, useEffect, useId, useRef, useState, type FormEvent } from 'react'
 import { sponsorContact, sponsorEndpoint, sponsorTiers } from '../data/event'
+import { emailReady, sendEmail } from '../lib/sendEmail'
 import { EASE } from './ui'
 
 const inputCls =
@@ -30,19 +31,40 @@ function BecomeSponsor({ onDone }: { onDone: () => void }) {
     setTried(true)
     if (missing) return
     // Honeypot: bots fill hidden fields.
-    if ((e.currentTarget.elements.namedItem('website') as HTMLInputElement | null)?.value) return
-    if (!sponsorEndpoint) {
+    if ((e.currentTarget.elements.namedItem('bcs_hp_x9') as HTMLInputElement | null)?.value) return
+    if (!sponsorEndpoint && !emailReady) {
       window.open(whatsappUrl(), '_blank', 'noopener')
       return
     }
     setState('sending')
     try {
-      const res = await fetch(sponsorEndpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify(v),
-      })
-      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+      if (emailReady) {
+        await sendEmail({
+          subject: `New sponsor enquiry: ${v.company.trim() || v.name.trim()}`,
+          heading: 'New sponsorship / vendor enquiry',
+          replyTo: v.email.trim(),
+          sections: [
+            {
+              title: 'Enquiry',
+              rows: [
+                ['Name', v.name.trim()],
+                ['Contact number', v.contact.trim()],
+                ['Email', v.email.trim()],
+                ['Company', v.company.trim()],
+              ],
+            },
+          ],
+        })
+      }
+      // Admin panel / backend (runs alongside the email when sponsorEndpoint is set).
+      if (sponsorEndpoint) {
+        const res = await fetch(sponsorEndpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(v),
+        })
+        if (!res.ok) throw new Error(`HTTP ${res.status}`)
+      }
       setState('done')
     } catch {
       setState('error')
@@ -83,7 +105,7 @@ function BecomeSponsor({ onDone }: { onDone: () => void }) {
     <form onSubmit={submit} noValidate className="relative bg-white p-5 pt-6 text-navy sm:p-8">
       <div className="absolute -left-[9999px]" aria-hidden="true">
         <label>
-          Website <input type="text" name="website" tabIndex={-1} autoComplete="off" />
+          Leave this empty <input type="text" name="bcs_hp_x9" tabIndex={-1} autoComplete="new-password" defaultValue="" />
         </label>
       </div>
       <p className="headline pr-12 text-[clamp(1.5rem,2.6vw,2rem)] text-blue">Become a sponsor</p>
