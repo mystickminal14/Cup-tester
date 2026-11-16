@@ -115,12 +115,12 @@ export function NextChampionDetails({ year }: { year: number }) {
       </p>
 
       <ol className="mt-6 border-t border-(--c-line)">
-        {['Champion', '2nd', '3rd'].map((place, i) => (
+        {['2nd', '3rd', '4th'].map((place, i) => (
           <li
             key={place}
             className="grid grid-cols-[2rem_minmax(0,1fr)_auto] items-baseline gap-3 border-b border-(--c-line) py-3"
           >
-            <span className="text-sm font-bold text-(--c-muted) tabular-nums">0{i + 1}</span>
+            <span className="text-sm font-bold text-(--c-muted) tabular-nums">0{i + 2}</span>
             <span className="text-[clamp(0.9rem,1.3vw,1.05rem)] font-bold text-(--c-muted) uppercase">
               It can be you
             </span>
