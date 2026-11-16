@@ -8,10 +8,10 @@ import { Deco, EASE } from './ui'
 export function Lockup({ className = '', animated = false }: { className?: string; animated?: boolean }) {
   return (
     <motion.img
-      src="/images/poster/lockup.webp"
+      src="/images/cup-tasters-logo-2026.webp"
       alt={`Cup Tasters Championship${event.year ? ` ${event.year}` : ''}`}
-      width={1600}
-      height={712}
+      width={1400}
+      height={641}
       className={`block h-auto w-full ${className}`}
       {...(animated && {
         initial: { opacity: 0, scale: 0.8, rotate: -4 },

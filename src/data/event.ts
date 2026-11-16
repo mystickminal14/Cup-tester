@@ -139,13 +139,6 @@ export const event = {
     /** Keep the form usable even before the official opening. */
     acceptingApplications: true,
     /**
-     * POST endpoint for the application form: the PHP admin's
-     * `api/register.php`, set via VITE_REGISTER_ENDPOINT in `.env.local`. Receives multipart/form-data. While null, the form runs
-     * in preview mode: it validates and shows the success state but sends
-     * nothing.
-     */
-    formEndpoint: (import.meta.env.VITE_REGISTER_ENDPOINT as string | undefined) ?? null,
-    /**
      * EmailJS (https://www.emailjs.com). When all three are set, every
      * application is also emailed. Set them in `.env.local`
      * (VITE_EMAILJS_SERVICE_ID, VITE_EMAILJS_TEMPLATE_ID, VITE_EMAILJS_PUBLIC_KEY).
@@ -354,12 +347,6 @@ export const sponsorTiers: { tier: string; name: string | null; logo: string | n
 
 /** "Become a sponsor" enquiries go to this number on WhatsApp. */
 export const sponsorContact = { name: 'Sijal', phone: '9761887079', whatsapp: '9779761887079' }
-
-/** Where the "Become a sponsor" form posts: the PHP API's sponsor.php, next to register.php. null → WhatsApp only. */
-export const sponsorEndpoint =
-  (import.meta.env.VITE_SPONSOR_ENDPOINT as string | undefined) ??
-  event.registration.formEndpoint?.replace(/register\.php$/, 'sponsor.php') ??
-  null
 
 /** Who the 2026 edition is open to (shown in the event strip). */
 export const openTo = 'Baristas, coffee professionals & enthusiasts'

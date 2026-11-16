@@ -1,20 +1,10 @@
-import { StrictMode, Suspense, lazy } from 'react'
+import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
 
-// The admin dashboard is its own chunk, loaded only on /admin.
-const AdminApp = lazy(() => import('./admin/AdminApp.tsx'))
-const isAdmin = /^\/admin(\/|$)/.test(window.location.pathname)
-
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    {isAdmin ? (
-      <Suspense fallback={null}>
-        <AdminApp />
-      </Suspense>
-    ) : (
-      <App />
-    )}
+    <App />
   </StrictMode>,
 )

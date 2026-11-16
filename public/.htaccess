@@ -1,15 +1,8 @@
-# Production (Apache): upload dist/* and server/* into the same web root.
+# Production (Apache): upload the contents of the zip into public_html.
 Options -Indexes
 
-# Never serve the PHP backend's private files.
-<FilesMatch "^(\.env.*|bootstrap\.php|setup\.php|router\.php|schema\.sql|README\.md)$">
-  Require all denied
-</FilesMatch>
-RedirectMatch 404 ^/storage/
-
-# Single-page app: /admin and friends fall back to index.html.
+# Single-page app: unknown paths fall back to index.html.
 RewriteEngine On
-RewriteCond %{REQUEST_URI} !^/api/
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^ index.html [L]

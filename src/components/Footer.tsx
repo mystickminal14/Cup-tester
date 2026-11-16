@@ -33,7 +33,6 @@ export function Footer() {
         <div className="mt-12 grid gap-10 md:mt-14 md:grid-cols-12">
           <div className="md:col-span-5">
             <CupTastersLogo className="h-auto w-full max-w-[340px]" />
-            <p className="headline mt-5 -rotate-2 text-[1.25rem] text-yellow">Better coffee. Brighter Nepal.</p>
             <p className="eyebrow mt-8 text-yellow">Organised by</p>
             <ul className="mt-3 flex flex-wrap items-center gap-3">
               {event.organizers.map((o) => (

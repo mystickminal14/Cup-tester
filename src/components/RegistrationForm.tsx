@@ -245,9 +245,9 @@ function Success({ name, preview, onReset }: { name: string; preview: boolean; o
         <p className="eyebrow mt-6 break-words text-white/70">Competitor · {name}</p>
         {preview && (
           <p className="mt-5 rounded-xl bg-white/10 p-4 text-xs text-white/75">
-            Preview mode: no form endpoint is configured yet, so this application was not sent. Set{' '}
-            <code className="break-all text-yellow">registration.formEndpoint</code> in{' '}
-            <code className="break-all text-yellow">src/data/event.ts</code>.
+            Preview mode: EmailJS is not configured, so this application was not sent. Set the{' '}
+            <code className="break-all text-yellow">VITE_EMAILJS_*</code> keys in{' '}
+            <code className="break-all text-yellow">.env.local</code> and rebuild.
           </p>
         )}
         <button type="button" onClick={onReset} className="btn mt-8 bg-yellow text-navy hover:bg-white">
@@ -280,8 +280,6 @@ function writePending(v: Pending | null) {
   }
 }
 
-const confirmEndpoint = event.registration.formEndpoint?.replace(/register\.php$/, 'confirm-payment.php') ?? null
-
 function PayScreen({ pending, onDone }: { pending: Pending; onDone: () => void }) {
   const ref = useRef<HTMLDivElement>(null)
   const [state, setState] = useState<'idle' | 'sending' | 'error'>('idle')
@@ -292,14 +290,6 @@ function PayScreen({ pending, onDone }: { pending: Pending; onDone: () => void }
   const confirm = async () => {
     setState('sending')
     try {
-      if (confirmEndpoint && pending.id > 0) {
-        const res = await fetch(confirmEndpoint, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-          body: JSON.stringify({ id: pending.id, token: pending.token }),
-        })
-        if (!res.ok) throw new Error(`HTTP ${res.status}`)
-      }
       onDone()
     } catch {
       setState('error')
@@ -485,8 +475,6 @@ export function RegistrationForm() {
 
     setStatus('sending')
     try {
-      const endpoint = event.registration.formEndpoint
-
       // Upload the photo first so the email can link to it. If the upload
       // fails, the application is still sent, just without the photo link.
       let uploadedPhotoUrl = ''
@@ -545,23 +533,10 @@ export function RegistrationForm() {
         })
       }
 
-      // Admin panel / backend submission (runs alongside the email when formEndpoint is set).
-      if (endpoint) {
-        const data = new FormData()
-        Object.entries(values).forEach(([k, v]) => data.append(k, String(v)))
-        if (photo) data.append('photo', photo)
-        if (uploadedPhotoUrl) data.append('photoUrl', uploadedPhotoUrl)
-        data.append('submittedAt', new Date().toISOString())
-        const res = await fetch(endpoint, { method: 'POST', body: data, headers: { Accept: 'application/json' } })
-        if (!res.ok) throw new Error(`HTTP ${res.status}`)
-        const out = (await res.json().catch(() => ({}))) as { id?: number; token?: string }
-        const p = { id: out.id ?? 0, token: out.token ?? '', name: values.fullName.trim() }
-        writePending(p)
-        setPending(p)
-      } else {
-        if (!emailReady) await new Promise((r) => setTimeout(r, 900))
-        setPending({ id: 0, token: '', name: values.fullName.trim() })
-      }
+      if (!emailReady) await new Promise((r) => setTimeout(r, 900))
+      const p = { id: 0, token: '', name: values.fullName.trim() }
+      writePending(p)
+      setPending(p)
       setStatus('idle')
       document.getElementById('register')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
     } catch {
@@ -683,7 +658,7 @@ export function RegistrationForm() {
               <Success
                 key="ok"
                 name={registeredName}
-                preview={!emailReady && !event.registration.formEndpoint}
+                preview={!emailReady}
                 onReset={reset}
               />
             ) : pending ? (
