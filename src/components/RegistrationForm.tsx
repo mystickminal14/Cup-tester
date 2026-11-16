@@ -326,7 +326,7 @@ function PayScreen({ pending, onDone }: { pending: Pending; onDone: () => void }
         <div className="mt-auto pt-6">
           {state === 'error' && (
             <p role="alert" className="mb-4 rounded-xl bg-danger/10 px-4 py-3 text-sm font-semibold text-danger">
-              Something went wrong. Please try again, or call {event.payment.phone} ({event.payment.contactName}).
+              Something went wrong. Please try again, or call {event.payment.phone}.
             </p>
           )}
           <button
@@ -350,7 +350,7 @@ function PayScreen({ pending, onDone }: { pending: Pending; onDone: () => void }
 /* ── Payment info ─────────────────────────────────────────────────────────── */
 
 function PaymentInfo() {
-  const { contactName, phone, whatsappUrl, qrImage } = event.payment
+  const { phone, whatsappUrl, qrImage } = event.payment
   const [qrMissing, setQrMissing] = useState(false)
   return (
     <div className="grid gap-5 rounded-2xl border-2 border-dashed border-blue/25 bg-cream/70 p-4 text-sm leading-relaxed text-navy sm:grid-cols-[auto_1fr] sm:p-5">
@@ -374,7 +374,7 @@ function PaymentInfo() {
           <li>
             Send it on WhatsApp to{' '}
             <a href={whatsappUrl} target="_blank" rel="noreferrer" className="font-bold underline decoration-red decoration-2 underline-offset-4">
-              {phone} ({contactName})
+              {phone}
             </a>
             .
           </li>
@@ -383,7 +383,7 @@ function PaymentInfo() {
         <p className="mt-3 text-navy/75">
           If you have any issues with payment, please contact us. For more information contact{' '}
           <a href={`tel:+977${phone}`} className="font-bold whitespace-nowrap">
-            {phone} ({contactName})
+            {phone}
           </a>
           .
         </p>

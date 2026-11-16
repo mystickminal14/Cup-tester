@@ -81,7 +81,7 @@ function BecomeSponsor({ onDone }: { onDone: () => void }) {
         <p className="mt-2 font-medium text-navy/75">
           We've received your enquiry. The Cup Tasters team will contact you soon. For anything urgent, call{' '}
           <a href={`tel:+977${sponsorContact.phone}`} className="font-bold">
-            {sponsorContact.phone} ({sponsorContact.name})
+            {sponsorContact.phone}
           </a>
           .
         </p>
@@ -134,7 +134,7 @@ function BecomeSponsor({ onDone }: { onDone: () => void }) {
           {state === 'sending' ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} />}
         </button>
         <a href={`tel:+977${sponsorContact.phone}`} className="flex items-center gap-2 text-sm font-semibold text-navy/75 hover:text-blue">
-          <Phone size={15} /> Or call directly: <span className="font-bold">{sponsorContact.phone} ({sponsorContact.name})</span>
+          <Phone size={15} /> Or call directly: <span className="font-bold">{sponsorContact.phone}</span>
         </a>
       </div>
     </form>
@@ -282,17 +282,17 @@ export function Sponsorship() {
           </motion.p>
         </div>
 
-        <ul className="mx-auto mt-12 grid max-w-5xl grid-cols-1 justify-items-center gap-12 sm:grid-cols-3 sm:gap-8">
+        <ul className="mx-auto mt-12 flex max-w-5xl flex-wrap items-start justify-center gap-x-6 gap-y-10 sm:gap-x-10">
           {sponsorTiers.map((t, i) => {
             const body = (
               <>
-                <span className="eyebrow mb-4 rounded-full bg-blue px-3.5 py-1.5 text-white">{t.tier}</span>
-                <span className="flex aspect-square w-[clamp(9rem,17vw,12rem)] items-center justify-center rounded-full bg-white shadow-[0_6px_0_0_var(--color-blue)] ring-[3px] ring-blue transition-transform duration-500 group-hover:scale-105">
+                <span className="eyebrow mb-3 rounded-full bg-blue px-3 py-1 text-[0.62rem] text-white">{t.tier}</span>
+                <span className="flex aspect-square w-[clamp(6.5rem,11vw,8rem)] items-center justify-center rounded-full bg-white shadow-[0_4px_0_0_var(--color-blue)] ring-2 ring-blue transition-transform duration-500 group-hover:scale-105">
                   {t.logo ? (
-                    <img src={t.logo} alt="" loading="lazy" className="max-h-[66%] max-w-[80%] object-contain" />
+                    <img src={t.logo} alt="" loading="lazy" className="max-h-[60%] max-w-[72%] object-contain" />
                   ) : (
                     <span className="flex h-[86%] w-[86%] items-center justify-center rounded-full border-2 border-dashed border-blue/30">
-                      <span className="headline text-[1rem] leading-tight text-navy/40">
+                      <span className="headline text-[0.8rem] leading-tight text-navy/40">
                         To be
                         <br />
                         determined
@@ -300,7 +300,7 @@ export function Sponsorship() {
                     </span>
                   )}
                 </span>
-                <span className="mt-5 block text-[0.82rem] leading-tight font-extrabold tracking-[0.12em] text-navy uppercase">
+                <span className="mt-4 block max-w-[9rem] text-[0.72rem] leading-tight font-extrabold tracking-[0.12em] text-navy uppercase">
                   {t.name ?? 'To be determined'}
                 </span>
               </>
@@ -338,7 +338,7 @@ export function Sponsorship() {
           <p className="text-sm font-semibold text-navy/80">
             Interested in sponsorship or vendor details? Or call{' '}
             <a href={`tel:+977${sponsorContact.phone}`} className="font-bold whitespace-nowrap text-blue underline decoration-red decoration-2 underline-offset-4">
-              {sponsorContact.phone} ({sponsorContact.name})
+              {sponsorContact.phone}
             </a>
           </p>
         </div>

@@ -175,7 +175,6 @@ export const event = {
   winners: 4,
   /** Payment help + where to send the payment statement. */
   payment: {
-    contactName: 'Sijal',
     phone: '9761887079',
     whatsappUrl: 'https://wa.me/9779761887079',
     /** Drop the payment QR image at public/images/qr.jpeg. */
@@ -353,7 +352,7 @@ export const sponsorTiers: { tier: string; name: string | null; logo: string | n
 ]
 
 /** "Become a sponsor" enquiries go to this number on WhatsApp. */
-export const sponsorContact = { name: 'Sijal', phone: '9761887079', whatsapp: '9779761887079' }
+export const sponsorContact = { phone: '9761887079', whatsapp: '9779761887079' }
 
 /** Where the "Become a sponsor" form posts: the PHP API's sponsor.php, next to register.php. null → WhatsApp only. */
 export const sponsorEndpoint =
@@ -414,13 +413,6 @@ export const gallery: GalleryImage[] = [
     src: '/images/gallery/03.webp',
     alt: 'Competitors lined up at the tables',
     caption: 'Competitors lined up at the tables',
-    credit: "The Barista's Coffee School",
-    source: 'event',
-  },
-  {
-    src: '/images/gallery/20.webp',
-    alt: 'Showing the odd cup',
-    caption: 'Showing the odd cup',
     credit: "The Barista's Coffee School",
     source: 'event',
   },
