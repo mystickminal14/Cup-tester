@@ -276,9 +276,9 @@ export function Sponsorship() {
             const body = (
               <>
                 <span className="eyebrow mb-3 rounded-full bg-blue px-3 py-1 text-[0.62rem] text-white">{t.tier}</span>
-                <span className="flex aspect-square w-[clamp(6.5rem,11vw,8rem)] items-center justify-center rounded-full bg-white shadow-[0_4px_0_0_var(--color-blue)] ring-2 ring-blue transition-transform duration-500 group-hover:scale-105">
+                <span className="flex aspect-square w-[clamp(8rem,14vw,10rem)] items-center justify-center rounded-full bg-white shadow-[0_4px_0_0_var(--color-blue)] ring-2 ring-blue transition-transform duration-500 group-hover:scale-105">
                   {t.logo ? (
-                    <img src={t.logo} alt="" loading="lazy" className="max-h-[60%] max-w-[72%] object-contain" />
+                    <img src={t.logo} alt="" loading="lazy" className="max-h-[70%] max-w-[80%] object-contain" />
                   ) : (
                     <span className="flex h-[86%] w-[86%] items-center justify-center rounded-full border-2 border-dashed border-blue/30">
                       <span className="headline text-[0.8rem] leading-tight text-navy/40">
@@ -289,7 +289,7 @@ export function Sponsorship() {
                     </span>
                   )}
                 </span>
-                <span className="mt-4 block max-w-[9rem] text-[0.72rem] leading-tight font-extrabold tracking-[0.12em] text-navy uppercase">
+                <span className="mt-4 block max-w-[11rem] text-[0.72rem] leading-tight font-extrabold tracking-[0.12em] text-navy uppercase">
                   {t.name ?? 'To be determined'}
                 </span>
               </>
