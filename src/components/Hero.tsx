@@ -111,27 +111,27 @@ export function Hero() {
 
           {/* Mascots, with the tagline brush over the steam as on the poster */}
           <motion.div className="relative mx-auto w-full max-w-[min(720px,72svh)] pt-12 lg:pt-0" style={{ y: mascotY }}>
-            <div className="relative">
-              <motion.img
-                src="/images/poster/mascots.webp"
-                alt="Cartoon coffee bean, cupping cup and yellow mug mascots tasting from three cups numbered 1, 2 and 1"
-                width={1800}
-                height={1341}
-                className="w-full"
-                initial={{ opacity: 0, y: 60 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ type: 'spring', stiffness: 90, damping: 14, delay: 0.5 }}
-                fetchPriority="high"
-              />
+            <div className="relative flex flex-col items-center">
               <motion.img
                 src="/images/poster/tagline.webp"
                 alt={event.tagline}
                 width={900}
                 height={156}
-                className="absolute top-0 left-[22%] w-[57%] -translate-y-[12%]"
+                className="relative z-10 mb-[-2%] w-[57%]"
                 initial={{ opacity: 0, scaleX: 0.2, rotate: -8 }}
                 animate={{ opacity: 1, scaleX: 1, rotate: -2 }}
                 transition={{ type: 'spring', stiffness: 140, damping: 13, delay: 1 }}
+              />
+              <motion.img
+                src="/images/poster/mascots.anim.webp"
+                alt="Animated cartoon coffee bean, cupping cup and yellow mug mascots tasting from three cups numbered 1, 2 and 1"
+                width={1221}
+                height={588}
+                className="w-full"
+                initial={{ opacity: 0, y: 60 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ type: 'spring', stiffness: 90, damping: 14, delay: 0.5 }}
+                fetchPriority="high"
               />
             </div>
           </motion.div>

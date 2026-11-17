@@ -127,7 +127,7 @@ export const event = {
   organizers: [
     { name: "The Barista's Coffee School", logo: '/images/partners/bcs.webp', href: 'https://baristascoffeeschool.com.np/' },
     { name: 'Jewel Himalayan Products', logo: '/images/partners/jewel-himalayan.webp', href: 'https://www.facebook.com/115726014446303' },
-    { name: 'Lekali Coffee Estate', logo: '/images/partners/lekali.webp', href: 'https://lekalicoffee.com/' },
+    { name: 'Lekali Coffee Estate', logo: '/images/partners/lekali.webp', href: 'https://www.instagram.com/lekali_coffee/?hl=en' },
     { name: 'Lakecity Coffee', logo: '/images/partners/lakecity.webp', href: 'https://www.google.com/search?q=Lakecity+Coffee+Nepal' },
   ] as { name: string; logo: string; href?: string }[],
 
@@ -168,8 +168,8 @@ export const event = {
   winners: 4,
   /** Payment help + where to send the payment statement. */
   payment: {
-    phone: '9761887079',
-    whatsappUrl: 'https://wa.me/9779761887079',
+    phone: '9818773122',
+    whatsappUrl: 'https://wa.me/9779818773122',
     /** Drop the payment QR image at public/images/qr.jpeg. */
     qrImage: '/images/qr.jpeg',
   },
@@ -338,14 +338,13 @@ export const archive: ArchiveEdition[] = [
 export const sponsors: Sponsor[] = [
 ]
 /** 2026 sponsorship line-up, shown right above the gallery. `name: null` → "To be determined". */
-export const sponsorTiers: { tier: string; name: string | null; logo: string | null; href?: string }[] = [
+export const sponsorTiers: { tier: string; name: string | null; logo: string | null; href?: string; dark?: boolean }[] = [
   { tier: 'Presented by', name: 'Katmandu Coffee', logo: '/images/sponsors/katmandu-coffee.svg', href: 'https://katmanducoffee.com/' },
-  { tier: 'Brought to you by', name: 'Himalayan Java Coffee', logo: '/images/sponsors/himalayan-java.png', href: 'https://himalayanjava.com/' },
-  { tier: 'Partner', name: null, logo: null },
+{ tier: 'Brought to you by', name: null, logo: '/images/cup-tasters-logo.webp', dark: true },  { tier: 'Partner', name: null, logo: '/images/cup-tasters-logo.webp', dark: true },
 ]
 
 /** "Become a sponsor" enquiries go to this number on WhatsApp. */
-export const sponsorContact = { phone: '9761887079', whatsapp: '9779761887079' }
+export const sponsorContact = { phone: '9818773122', whatsapp: '9779818773122' }
 
 /** Who the 2026 edition is open to (shown in the event strip). */
 export const openTo = 'Baristas, coffee professionals & enthusiasts'
@@ -535,6 +534,153 @@ export const gallery: GalleryImage[] = [
     src: '/images/gallery/16.webp',
     alt: 'Finalists on stage',
     caption: 'Finalists on stage',
+    credit: "The Barista's Coffee School",
+    source: 'event',
+  },
+  {
+    src: '/images/gallery/36.webp',
+    alt: 'The head judge briefs competitors before the round',
+    caption: 'The head judge briefs competitors before the round',
+    credit: "The Barista's Coffee School",
+    source: 'event',
+  },
+  {
+    src: '/images/gallery/37.webp',
+    alt: 'Competitors listen in at the cupping tables',
+    caption: 'Competitors listen in at the cupping tables',
+    credit: "The Barista's Coffee School",
+    source: 'event',
+  },
+  {
+    src: '/images/gallery/38.webp',
+    alt: 'Showing competitors how the round works',
+    caption: 'Showing competitors how the round works',
+    credit: "The Barista's Coffee School",
+    source: 'event',
+  },
+  {
+    src: '/images/gallery/39.webp',
+    alt: 'Cupping tables set and ready',
+    caption: 'Cupping tables set and ready',
+    credit: "The Barista's Coffee School",
+    source: 'event',
+  },
+  {
+    src: '/images/gallery/40.webp',
+    alt: 'Announcing the finalists on stage',
+    caption: 'Announcing the finalists on stage',
+    credit: "The Barista's Coffee School",
+    source: 'event',
+  },
+  {
+    src: '/images/gallery/41.webp',
+    alt: 'The host on stage with the finalists on screen',
+    caption: 'The host on stage with the finalists on screen',
+    credit: "The Barista's Coffee School",
+    source: 'event',
+  },
+  {
+    src: '/images/gallery/42.webp',
+    alt: 'Finalists tasting on stage',
+    caption: 'Finalists tasting on stage',
+    credit: "The Barista's Coffee School",
+    source: 'event',
+  },
+  {
+    src: '/images/gallery/43.webp',
+    alt: 'A competitor tastes up close',
+    caption: 'A competitor tastes up close',
+    credit: "The Barista's Coffee School",
+    source: 'event',
+  },
+  {
+    src: '/images/gallery/44.webp',
+    alt: 'The 2024 trophies on display',
+    caption: 'The 2024 trophies on display',
+    credit: "The Barista's Coffee School",
+    source: 'event',
+  },
+  {
+    src: '/images/gallery/45.webp',
+    alt: 'The championship trophies',
+    caption: 'The championship trophies',
+    credit: "The Barista's Coffee School",
+    source: 'event',
+  },
+  {
+    src: '/images/gallery/46.webp',
+    alt: 'Cups lined up across the tables',
+    caption: 'Cups lined up across the tables',
+    credit: "The Barista's Coffee School",
+    source: 'event',
+  },
+  {
+    src: '/images/gallery/47.webp',
+    alt: 'Competitors wait at their tables',
+    caption: 'Competitors wait at their tables',
+    credit: "The Barista's Coffee School",
+    source: 'event',
+  },
+  {
+    src: '/images/gallery/48.webp',
+    alt: 'A finalist focuses on the cups',
+    caption: 'A finalist focuses on the cups',
+    credit: "The Barista's Coffee School",
+    source: 'event',
+  },
+  {
+    src: '/images/gallery/49.webp',
+    alt: 'Competitors tasting in the round',
+    caption: 'Competitors tasting in the round',
+    credit: "The Barista's Coffee School",
+    source: 'event',
+  },
+  {
+    src: '/images/gallery/50.webp',
+    alt: 'Tasting at the Lakecity Coffee table',
+    caption: 'Tasting at the Lakecity Coffee table',
+    credit: "The Barista's Coffee School",
+    source: 'event',
+  },
+  {
+    src: '/images/gallery/51.webp',
+    alt: 'A finalist slurps on stage',
+    caption: 'A finalist slurps on stage',
+    credit: "The Barista's Coffee School",
+    source: 'event',
+  },
+  {
+    src: '/images/gallery/52.webp',
+    alt: 'A guest on stage',
+    caption: 'A guest on stage',
+    credit: "The Barista's Coffee School",
+    source: 'event',
+  },
+  {
+    src: '/images/gallery/53.webp',
+    alt: 'Tasting in the final round',
+    caption: 'Tasting in the final round',
+    credit: "The Barista's Coffee School",
+    source: 'event',
+  },
+  {
+    src: '/images/gallery/54.webp',
+    alt: 'A prize handed over on stage',
+    caption: 'A prize handed over on stage',
+    credit: "The Barista's Coffee School",
+    source: 'event',
+  },
+  {
+    src: '/images/gallery/55.webp',
+    alt: 'Prizes for the competitors',
+    caption: 'Prizes for the competitors',
+    credit: "The Barista's Coffee School",
+    source: 'event',
+  },
+  {
+    src: '/images/gallery/56.webp',
+    alt: 'Gift hampers for the winners',
+    caption: 'Gift hampers for the winners',
     credit: "The Barista's Coffee School",
     source: 'event',
   },

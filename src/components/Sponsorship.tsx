@@ -276,7 +276,7 @@ export function Sponsorship() {
             const body = (
               <>
                 <span className="eyebrow mb-3 rounded-full bg-blue px-3 py-1 text-[0.62rem] text-white">{t.tier}</span>
-                <span className="flex aspect-square w-[clamp(8rem,14vw,10rem)] items-center justify-center rounded-full bg-white shadow-[0_4px_0_0_var(--color-blue)] ring-2 ring-blue transition-transform duration-500 group-hover:scale-105">
+                <span className={`flex aspect-square w-[clamp(8rem,14vw,10rem)] items-center justify-center rounded-full ${t.dark ? 'bg-blue' : 'bg-white'} shadow-[0_4px_0_0_var(--color-blue)] ring-2 ring-blue transition-transform duration-500 group-hover:scale-105`}>
                   {t.logo ? (
                     <img src={t.logo} alt="" loading="lazy" className="max-h-[70%] max-w-[80%] object-contain" />
                   ) : (
