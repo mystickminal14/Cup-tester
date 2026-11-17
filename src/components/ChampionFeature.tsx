@@ -82,7 +82,7 @@ export function NextChampionFigure() {
         >
           ?
         </motion.span>
-        <p className="headline relative mt-1 text-[clamp(1.9rem,4.4vw,3.3rem)] text-white headline-shadow">
+        <p className="headline relative mt-1 text-[clamp(1.6rem,3.8vw,2.8rem)] text-white headline-shadow">
           It can be <span className="text-yellow">you!</span>
         </p>
       </div>
