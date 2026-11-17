@@ -64,9 +64,16 @@ export function ChampionFeature({ edition }: { edition: ArchiveEdition }) {
 export function NextChampionFigure() {
   return (
     <figure className="min-w-0">
-      <div className="relative flex aspect-[4/3] flex-col items-center overflow-hidden rounded-[1.5rem] bg-navy px-6 pt-[6%] text-center ring-2 ring-white/15">
-        {/* spotlight */}
-        <span className="pointer-events-none absolute -top-1/3 left-1/2 h-[140%] w-[70%] -translate-x-1/2 rounded-[50%] bg-radial from-yellow/35 to-transparent to-70%" />
+      <div className="relative flex aspect-[4/3] flex-col items-center overflow-hidden rounded-[1.5rem] bg-blue px-6 pt-[3%] text-center ring-2 ring-white/15">
+        <img
+          src="/images/poster/it-can-be-you.webp"
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          width={1200}
+          height={900}
+          className="absolute inset-0 h-full w-full object-cover"
+        />
         <motion.span
           className="headline relative text-[clamp(3.2rem,8vw,6rem)] leading-none text-yellow headline-shadow"
           animate={{ rotate: [-4, 4, -4] }}
@@ -78,16 +85,6 @@ export function NextChampionFigure() {
         <p className="headline relative mt-1 text-[clamp(1.9rem,4.4vw,3.3rem)] text-white headline-shadow">
           It can be <span className="text-yellow">you!</span>
         </p>
-        <motion.img
-          src="/images/poster/mascots.webp"
-          alt=""
-          aria-hidden="true"
-          loading="lazy"
-          className="absolute -bottom-[5%] left-1/2 w-[52%] -translate-x-1/2"
-          initial={{ y: 40, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ type: 'spring', stiffness: 90, damping: 14, delay: 0.2 }}
-        />
       </div>
       <figcaption className="eyebrow mt-3 text-(--c-muted)">Artwork: Cup Tasters Championship 2026 poster</figcaption>
     </figure>
