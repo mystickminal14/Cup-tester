@@ -11,7 +11,8 @@ export function EventDetails() {
       label: 'Registration',
       value: event.registration.status === 'tba' ? null : registrationStatusLabel[event.registration.status],
     },
-    { label: 'Entry fee', value: event.fee },
+    { label: 'Entry fee', value: 'Free' },
+    { label: 'Registration fee', value: event.fee },
     { label: 'Winners', value: `${event.winners} winners in ${event.year}` },
   ]
 

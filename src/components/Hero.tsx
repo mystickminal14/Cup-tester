@@ -127,7 +127,7 @@ export function Hero() {
                 alt="Animated cartoon coffee bean, cupping cup and yellow mug mascots tasting from three cups numbered 1, 2 and 1"
                 width={1221}
                 height={588}
-                className="w-full"
+                className="-mt-px w-full origin-bottom scale-[1.03]"
                 initial={{ opacity: 0, y: 60 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ type: 'spring', stiffness: 90, damping: 14, delay: 0.5 }}

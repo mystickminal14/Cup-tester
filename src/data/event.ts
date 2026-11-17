@@ -161,7 +161,7 @@ export const event = {
   },
 
   /** Registration fee, e.g. "NPR 1,500". null → TBA. Never invent one. */
-  fee: 'Rs 3,000 (Three Thousand Rupees)' as string | null,
+  fee: 'Rs 4,000 (Four Thousand Rupees)' as string | null,
   /** Prize information. null → TBA. */
   prize: null as string | null,
   /** Number of winners in this edition. */
@@ -339,7 +339,7 @@ export const sponsors: Sponsor[] = [
 ]
 /** 2026 sponsorship line-up, shown right above the gallery. `name: null` → "To be determined". */
 export const sponsorTiers: { tier: string; name: string | null; logo: string | null; href?: string; dark?: boolean }[] = [
-  { tier: 'Presented by', name: 'Katmandu Coffee', logo: '/images/sponsors/katmandu-coffee.svg', href: 'https://katmanducoffee.com/' },
+  { tier: 'Title Sponsor', name: 'Katmandu Coffee', logo: '/images/sponsors/katmandu-coffee.svg', href: 'https://katmanducoffee.com/' },
 { tier: 'Brought to you by', name: null, logo: '/images/cup-tasters-logo.webp', dark: true },  { tier: 'Partner', name: null, logo: '/images/cup-tasters-logo.webp', dark: true },
 ]
 
