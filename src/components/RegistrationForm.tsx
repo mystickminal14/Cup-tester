@@ -384,6 +384,9 @@ function PaymentInfo() {
 
 /* ── Main component ───────────────────────────────────────────────────────── */
 
+/** While registration is "coming soon" the form is shown but locked. */
+const comingSoon = event.registration.status === 'coming-soon'
+
 export function RegistrationForm() {
   const uid = useId()
   const id = (n: string) => `${uid}-${n}`
@@ -462,6 +465,7 @@ export function RegistrationForm() {
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    if (comingSoon) return
     if (step < steps.length - 1) return next()
     setAttempted(steps.map(() => true))
     const badStep = steps.findIndex((_, i) => stepErrors(i).length > 0)
@@ -591,9 +595,8 @@ export function RegistrationForm() {
       <label htmlFor={id(k)} className="flex cursor-pointer items-start gap-3">
         <input {...a11y(k)} type="checkbox" checked={values[k]} onChange={set(k)} className="peer sr-only" />
         <span
-          className={`mt-px flex h-6 w-6 shrink-0 items-center justify-center rounded-md border-2 transition-colors peer-focus-visible:ring-4 peer-focus-visible:ring-yellow/70 ${
-            values[k] ? 'border-blue bg-blue text-yellow' : show(k) ? 'border-danger bg-white' : 'border-blue/40 bg-white'
-          }`}
+          className={`mt-px flex h-6 w-6 shrink-0 items-center justify-center rounded-md border-2 transition-colors peer-focus-visible:ring-4 peer-focus-visible:ring-yellow/70 ${values[k] ? 'border-blue bg-blue text-yellow' : show(k) ? 'border-danger bg-white' : 'border-blue/40 bg-white'
+            }`}
           aria-hidden="true"
         >
           {values[k] && <Check size={13} strokeWidth={3} />}
@@ -652,7 +655,7 @@ export function RegistrationForm() {
         </div>
 
         {/* Right: form / success */}
-        <div className="min-w-0 lg:col-span-7">
+        <div className="relative min-w-0 lg:col-span-7">
           <AnimatePresence mode="wait">
             {status === 'done' ? (
               <Success
@@ -680,6 +683,8 @@ export function RegistrationForm() {
                 noValidate
                 onSubmit={onSubmit}
                 aria-label="Cup Tasters Championship application"
+                inert={comingSoon}
+                aria-hidden={comingSoon || undefined}
                 className="sticker relative flex h-full scroll-mt-24 flex-col overflow-hidden rounded-[2rem] bg-white"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -716,16 +721,14 @@ export function RegistrationForm() {
                           disabled={i > reached}
                           onClick={() => goTo(i)}
                           title={st.title}
-                          className={`relative flex min-w-0 items-center justify-center gap-1.5 rounded-t-2xl px-1.5 py-3 text-[0.85rem] font-bold transition-colors sm:px-2.5 ${
-                            on
+                          className={`relative flex min-w-0 items-center justify-center gap-1.5 rounded-t-2xl px-1.5 py-3 text-[0.85rem] font-bold transition-colors sm:px-2.5 ${on
                               ? 'bg-white text-blue'
                               : 'text-white/75 hover:bg-white/10 hover:text-white disabled:opacity-45 disabled:hover:bg-transparent'
-                          }`}
+                            }`}
                         >
                           <span
-                            className={`headline flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[0.85rem] ${
-                              on ? 'bg-yellow text-navy' : done ? 'bg-yellow text-navy' : 'bg-white/15'
-                            }`}
+                            className={`headline flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[0.85rem] ${on ? 'bg-yellow text-navy' : done ? 'bg-yellow text-navy' : 'bg-white/15'
+                              }`}
                           >
                             {done && !on ? <Check size={14} strokeWidth={3} /> : i + 1}
                           </span>
@@ -904,9 +907,8 @@ export function RegistrationForm() {
                               }}
                               onDragLeave={() => setDragging(false)}
                               onDrop={onDrop}
-                              className={`flex min-w-0 flex-col items-center gap-4 rounded-2xl border-2 border-dashed bg-cream/60 p-5 text-center transition-colors focus-within:ring-4 focus-within:ring-yellow/70 sm:flex-row sm:text-left ${
-                                dragging ? 'border-red bg-red/5' : show('photo') ? 'border-danger' : 'border-blue/30'
-                              }`}
+                              className={`flex min-w-0 flex-col items-center gap-4 rounded-2xl border-2 border-dashed bg-cream/60 p-5 text-center transition-colors focus-within:ring-4 focus-within:ring-yellow/70 sm:flex-row sm:text-left ${dragging ? 'border-red bg-red/5' : show('photo') ? 'border-danger' : 'border-blue/30'
+                                }`}
                             >
                               <span className="flex h-32 w-32 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-yellow">
                                 {photoUrl ? (
@@ -1026,6 +1028,20 @@ export function RegistrationForm() {
               </motion.form>
             )}
           </AnimatePresence>
+          {comingSoon && !pending && (
+            <div className="absolute inset-0 z-20 flex items-center justify-center rounded-[2rem] bg-blue/75 p-6 text-center backdrop-blur-[3px]">
+              <div className="sticker max-w-sm rounded-[1.5rem] bg-white px-7 py-8 text-navy">
+                <p className="eyebrow inline-flex items-center gap-2 rounded-full bg-yellow px-3.5 py-1.5 text-[0.72rem] text-navy">
+                  <span className="h-2 w-2 animate-pulse rounded-full bg-red" aria-hidden="true" />
+                  Coming soon
+                </p>
+                <p className="headline mt-4 text-[clamp(1.6rem,3vw,2.2rem)] text-blue">Registration opening soon</p>
+                <p className="mt-2 text-sm font-medium text-navy/75">
+                  The application form will open in a day or two. Check back soon to secure your spot.
+                </p>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </section>

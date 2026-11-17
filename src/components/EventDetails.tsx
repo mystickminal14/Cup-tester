@@ -6,7 +6,7 @@ export function EventDetails() {
   const rows: { label: string; value: string | null; href?: string | null }[] = [
     { label: 'Date', value: event.date.label ?? 'Coming soon' },
     { label: 'Venue', value: event.venue.name, href: event.venue.mapUrl },
-    { label: 'City', value: event.city },
+    { label: 'Location', value: 'Sanepa' },
     {
       label: 'Registration',
       value: event.registration.status === 'tba' ? null : registrationStatusLabel[event.registration.status],
