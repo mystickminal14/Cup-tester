@@ -5,12 +5,15 @@
 #
 #   scripts/package.sh              → site at the domain root; extract in public_html
 #   scripts/package.sh /cuptester/  → site in a subfolder; extract in public_html/cuptester
+#   scripts/package.sh ./           → works in ANY folder name (relative paths)
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
 base="${1:-/}"
-[[ "$base" == /* ]] || base="/$base"
-[[ "$base" == */ ]] || base="$base/"
+if [[ "$base" != "./" ]]; then
+  [[ "$base" == /* ]] || base="/$base"
+  [[ "$base" == */ ]] || base="$base/"
+fi
 
 BASE_PATH="$base" npm run build
 
@@ -22,7 +25,6 @@ Options -Indexes
 DirectoryIndex index.html
 
 RewriteEngine On
-RewriteBase ${base}
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^ index.html [L]
@@ -30,6 +32,7 @@ HT
 
 name="cup-tasters-deploy"
 [[ "$base" == "/" ]] || name="cup-tasters-$(basename "$base")"
+[[ "$base" == "./" ]] && name="cup-tasters-any-folder"
 rm -f "$name.zip"
 (cd dist && zip -qr "../$name.zip" . -x '.DS_Store' '*.zip')
 echo "✓ $name.zip ready ($(du -h "$name.zip" | cut -f1)) for base path $base"

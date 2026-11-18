@@ -22,12 +22,12 @@ export function eventJsonLd(): string | null {
       name: event.venue.name,
       address: event.venue.address ?? event.city,
     },
-    image: [new URL(asset('/images/og-image.jpg'), window.location.origin).href],
+    image: [new URL(asset('/images/og-image.jpg'), window.location.href).href],
     organizer: { '@type': 'Organization', name: organizer.name, url: organizer.website },
     ...(event.registration.status === 'open' && {
       offers: {
         '@type': 'Offer',
-        url: `${window.location.origin}${import.meta.env.BASE_URL}#register`,
+        url: new URL('#register', window.location.href).href,
         availability: 'https://schema.org/InStock',
         ...(event.fee && { price: event.fee }),
       },

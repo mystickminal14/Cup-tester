@@ -483,13 +483,6 @@ export const gallery: GalleryImage[] = [
     source: 'event',
   },
   {
-    src: asset('/images/gallery/26.webp'),
-    alt: 'Calling out the pick',
-    caption: 'Calling out the pick',
-    credit: "The Barista's Coffee School",
-    source: 'event',
-  },
-  {
     src: asset('/images/gallery/15.webp'),
     alt: 'Finalists celebrating',
     caption: 'Finalists celebrating',
