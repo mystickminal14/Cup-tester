@@ -9,7 +9,7 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-base="${1:-/}"
+base="${1:-./}"
 if [[ "$base" != "./" ]]; then
   [[ "$base" == /* ]] || base="/$base"
   [[ "$base" == */ ]] || base="$base/"
