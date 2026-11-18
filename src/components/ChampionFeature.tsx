@@ -64,7 +64,7 @@ export function ChampionFeature({ edition }: { edition: ArchiveEdition }) {
 export function NextChampionFigure() {
   return (
     <figure className="min-w-0">
-      <div className="relative flex aspect-[4/3] flex-col items-center overflow-hidden rounded-[1.5rem] bg-blue px-6 pt-[3%] text-center ring-2 ring-white/15">
+      <div className="relative flex aspect-[4/3] flex-col items-center overflow-hidden rounded-[1.5rem] bg-blue px-6 pt-[5%] text-center ring-2 ring-white/15">
         <img
           src="/images/poster/it-can-be-you.webp"
           alt=""
@@ -82,7 +82,7 @@ export function NextChampionFigure() {
         >
           ?
         </motion.span>
-        <p className="headline relative mt-1 text-[clamp(1.6rem,3.8vw,2.8rem)] text-white headline-shadow">
+        <p className="headline relative mt-2 text-[clamp(1.6rem,3.8vw,2.8rem)] text-white headline-shadow">
           It can be <span className="text-yellow">you!</span>
         </p>
       </div>
