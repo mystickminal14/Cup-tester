@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import type { ArchiveEdition } from '../data/event'
 import { CupMark, SplitLines } from './ui'
+import { asset } from '../lib/asset'
 
 const outline = 'text-transparent [-webkit-text-stroke:1.5px_var(--c-outline)]'
 
@@ -66,7 +67,7 @@ export function NextChampionFigure() {
     <figure className="min-w-0">
       <div className="relative flex aspect-[4/3] flex-col items-center overflow-hidden rounded-[1.5rem] bg-blue px-6 pt-[5%] text-center ring-2 ring-white/15">
         <img
-          src="/images/poster/it-can-be-you.webp"
+          src={asset('/images/poster/it-can-be-you.webp')}
           alt=""
           aria-hidden="true"
           loading="lazy"

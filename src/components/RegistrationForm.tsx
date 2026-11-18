@@ -351,7 +351,7 @@ function PaymentInfo() {
           </div>
         ) : (
           <a href={qrImage} target="_blank" rel="noreferrer" className="block self-start rounded-xl bg-white p-2 ring-2 ring-blue/15" title="Open QR code full size">
-            <img src={qrImage} alt="Payment QR code (Global IME Bank)" className="h-auto w-56 sm:w-52" onError={() => setQrMissing(true)} />
+            <img src={qrImage} alt="Payment QR code (eSewa, Manoz Shahi, 9818773122)" className="h-auto w-56 sm:w-52" onError={() => setQrMissing(true)} />
           </a>
         )}
       </div>

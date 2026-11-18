@@ -1,6 +1,7 @@
 import { motion, useInView, animate, type Variants } from 'framer-motion'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import logoUrl from '../assets/bcs-logo.png'
+import { asset } from '../lib/asset'
 
 export const EASE = [0.22, 1, 0.36, 1] as const
 
@@ -22,7 +23,7 @@ export function BrandLogo({ size = 44, className = '' }: { size?: number; classN
 export function CupTastersLogo({ className = '' }: { className?: string }) {
   return (
     <img
-      src="/images/cup-tasters-logo.webp"
+      src={asset('/images/cup-tasters-logo.webp')}
       alt="Cup Tasters Championship"
       width={800}
       height={613}
@@ -136,7 +137,7 @@ export function Deco({
 }) {
   return (
     <motion.img
-      src={`/images/poster/${kind}.webp`}
+      src={asset(`/images/poster/${kind}.webp`)}
       alt=""
       aria-hidden="true"
       loading="lazy"

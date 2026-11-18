@@ -3,12 +3,13 @@ import { useRef } from 'react'
 import { event } from '../data/event'
 import { EventStrip } from './EventStrip'
 import { Deco, EASE } from './ui'
+import { asset } from '../lib/asset'
 
 /** The poster's "CUP TASTERS CHAMPIONSHIP 2026" lettering. */
 export function Lockup({ className = '', animated = false }: { className?: string; animated?: boolean }) {
   return (
     <motion.img
-      src="/images/cup-tasters-logo-2026.webp"
+      src={asset('/images/cup-tasters-logo-2026.webp')}
       alt={`Cup Tasters Championship${event.year ? ` ${event.year}` : ''}`}
       width={1400}
       height={641}
@@ -113,7 +114,7 @@ export function Hero() {
           <motion.div className="relative mx-auto w-full max-w-[min(720px,72svh)] pt-12 lg:pt-0" style={{ y: mascotY }}>
             <div className="relative flex flex-col items-center">
               <motion.img
-                src="/images/poster/tagline.webp"
+                src={asset('/images/poster/tagline.webp')}
                 alt={event.tagline}
                 width={900}
                 height={156}
@@ -123,7 +124,7 @@ export function Hero() {
                 transition={{ type: 'spring', stiffness: 140, damping: 13, delay: 1 }}
               />
               <motion.img
-                src="/images/poster/mascots.anim.webp"
+                src={asset('/images/poster/mascots.anim.webp')}
                 alt="Animated cartoon coffee bean, cupping cup and yellow mug mascots tasting from three cups numbered 1, 2 and 1"
                 width={1221}
                 height={588}

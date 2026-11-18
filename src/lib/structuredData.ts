@@ -1,4 +1,5 @@
 import { event, organizer } from '../data/event'
+import { asset } from './asset'
 
 /**
  * schema.org Event JSON-LD. Returns null until the date and venue are officially
@@ -21,12 +22,12 @@ export function eventJsonLd(): string | null {
       name: event.venue.name,
       address: event.venue.address ?? event.city,
     },
-    image: [new URL('/images/og-image.jpg', window.location.origin).href],
+    image: [new URL(asset('/images/og-image.jpg'), window.location.origin).href],
     organizer: { '@type': 'Organization', name: organizer.name, url: organizer.website },
     ...(event.registration.status === 'open' && {
       offers: {
         '@type': 'Offer',
-        url: `${window.location.origin}/#register`,
+        url: `${window.location.origin}${import.meta.env.BASE_URL}#register`,
         availability: 'https://schema.org/InStock',
         ...(event.fee && { price: event.fee }),
       },
