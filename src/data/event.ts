@@ -134,7 +134,7 @@ export const event = {
 
   registration: {
     /* The 2026 poster announces the championship as "Coming soon". */
-    status: 'open' as RegistrationStatus,
+    status: 'closed' as RegistrationStatus,
     /** Free text shown next to the status, e.g. "Closes 1 March 2026". */
     note: null as string | null,
     /** Keep the form usable even before the official opening. */
