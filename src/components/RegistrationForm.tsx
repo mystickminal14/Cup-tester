@@ -384,8 +384,10 @@ function PaymentInfo() {
 
 /* ── Main component ───────────────────────────────────────────────────────── */
 
-/** While registration is "coming soon" the form is shown but locked. */
+/** While registration is "coming soon" or closed, the form is shown but locked under a notice. */
 const comingSoon = event.registration.status === 'coming-soon'
+const regClosed = event.registration.status === 'closed' || !event.registration.acceptingApplications
+const locked = comingSoon || regClosed
 
 export function RegistrationForm() {
   const uid = useId()
@@ -465,7 +467,7 @@ export function RegistrationForm() {
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (comingSoon) return
+    if (locked) return
     if (step < steps.length - 1) return next()
     setAttempted(steps.map(() => true))
     const badStep = steps.findIndex((_, i) => stepErrors(i).length > 0)
@@ -567,7 +569,6 @@ export function RegistrationForm() {
     setStatus('idle')
   }
 
-  const closed = event.registration.status === 'closed' || !event.registration.acceptingApplications
   const errorCount = stepErrors(step).length
   const last = step === steps.length - 1
 
@@ -666,16 +667,6 @@ export function RegistrationForm() {
               />
             ) : pending ? (
               <PayScreen key="pay" pending={pending} onDone={paid} />
-            ) : closed ? (
-              <motion.div
-                key="closed"
-                className="rounded-[2rem] bg-white p-8"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-              >
-                <p className="title-section text-blue">Registration closed</p>
-                <p className="mt-3 text-navy/75">Follow The Barista&rsquo;s Coffee School for the next edition.</p>
-              </motion.div>
             ) : (
               <motion.form
                 key="form"
@@ -683,8 +674,8 @@ export function RegistrationForm() {
                 noValidate
                 onSubmit={onSubmit}
                 aria-label="Cup Tasters Championship application"
-                inert={comingSoon}
-                aria-hidden={comingSoon || undefined}
+                inert={locked}
+                aria-hidden={locked || undefined}
                 className="sticker relative flex h-full scroll-mt-24 flex-col overflow-hidden rounded-[2rem] bg-white"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -1028,17 +1019,32 @@ export function RegistrationForm() {
               </motion.form>
             )}
           </AnimatePresence>
-          {comingSoon && !pending && (
+          {locked && !pending && (
             <div className="absolute inset-0 z-20 flex items-center justify-center rounded-[2rem] bg-blue/75 p-6 text-center backdrop-blur-[3px]">
               <div className="sticker max-w-sm rounded-[1.5rem] bg-white px-7 py-8 text-navy">
-                <p className="eyebrow inline-flex items-center gap-2 rounded-full bg-yellow px-3.5 py-1.5 text-[0.72rem] text-navy">
-                  <span className="h-2 w-2 animate-pulse rounded-full bg-red" aria-hidden="true" />
-                  Coming soon
-                </p>
-                <p className="headline mt-4 text-[clamp(1.6rem,3vw,2.2rem)] text-blue">Registration opening soon</p>
-                <p className="mt-2 text-sm font-medium text-navy/75">
-                  The application form will open in a day or two. Check back soon to secure your spot.
-                </p>
+                {regClosed ? (
+                  <>
+                    <p className="eyebrow inline-flex items-center gap-2 rounded-full bg-yellow px-3.5 py-1.5 text-[0.72rem] text-navy">
+                      <span className="h-2 w-2 rounded-full bg-red" aria-hidden="true" />
+                      Registration closed
+                    </p>
+                    <p className="headline mt-4 text-[clamp(1.6rem,3vw,2.2rem)] text-blue">Registration closed</p>
+                    <p className="mt-2 text-sm font-medium text-navy/75">
+                      Thank you for the amazing response! Registrations for the Cup Tasters Championship are now closed.
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <p className="eyebrow inline-flex items-center gap-2 rounded-full bg-yellow px-3.5 py-1.5 text-[0.72rem] text-navy">
+                      <span className="h-2 w-2 animate-pulse rounded-full bg-red" aria-hidden="true" />
+                      Coming soon
+                    </p>
+                    <p className="headline mt-4 text-[clamp(1.6rem,3vw,2.2rem)] text-blue">Registration opening soon</p>
+                    <p className="mt-2 text-sm font-medium text-navy/75">
+                      The application form will open in a day or two. Check back soon to secure your spot.
+                    </p>
+                  </>
+                )}
               </div>
             </div>
           )}
